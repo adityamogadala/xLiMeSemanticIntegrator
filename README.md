@@ -5,12 +5,12 @@ Dependencies
 -------------------------
 Code is Written in Python and Java. Also, it depends on:
 
--- Python 2.7
--- Numpy
--- Scipy
--- Pymongo  (https://api.mongodb.com/python/current/)
--- Rake (https://github.com/aneesha/RAKE)
--- Kafka Python Client (https://github.com/dpkp/kafka-python)
+-> Python 2.7
+-> Numpy
+-> Scipy
+-> Pymongo  (https://api.mongodb.com/python/current/)
+-> Rake (https://github.com/aneesha/RAKE)
+-> Kafka Python Client (https://github.com/dpkp/kafka-python)
 
 --------------------------
 Related Publications

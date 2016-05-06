@@ -144,58 +144,70 @@ class NewsToTvIndex:
 		with open('./picklefiles/docbivec_es_en.pkl', 'wb') as outfile:
 		    pickle.dump(matrix, outfile, pickle.HIGHEST_PROTOCOL)
         def calcsize(self):
-                client = MongoClient('aifb-ls3-merope.aifb.kit.edu',27017)
-                client.the_database.authenticate('vicouser', 'testrun', source=self.db)
-                storedb = client[self.db]
-                collection = storedb["zattooasr"]
-                corpus_en=[]
-                corpus_de=[]
-                corpus_it=[]
-                corpus_es=[]
-                corpus_en_id=[]
-                corpus_de_id=[]
-                corpus_it_id=[]
-                corpus_es_id=[]
-                for p in collection.find():
-                             	if p["Lang"]=="en" and p["SpeechToText"]!="":
-                                        corpus_en.append(p["SpeechToText"].strip().strip("\n").encode('utf-8', 'replace').decode("utf-8"))
-					corpus_en_id.append(str(p['_id']))
-                                elif p["Lang"]=="de" and p["SpeechToText"]!="":
-                                        corpus_de.append(p["SpeechToText"].strip().strip("\n").encode('utf-8', 'replace'))
-					corpus_de_id.append(str(p['_id']))
-                                elif p["Lang"]=="it" and p["SpeechToText"]!="":
-                                        corpus_it.append(p["SpeechToText"].strip().strip("\n").encode('utf-8', 'replace'))
-					corpus_it_id.append(str(p['_id']))
-                                elif p["Lang"]=="es" and p["SpeechToText"]!="":
-                                        corpus_es.append(p["SpeechToText"].strip().strip("\n").encode('utf-8', 'replace'))
-					corpus_es_id.append(str(p['_id']))
+		configdict={}
+                config = '../config/Config.conf'
+                with open(config) as config_file:
+                        for lines in config_file:
+                                key = lines.strip('\n').split['=']
+                                configdict[key[0]]=key[1]
+                if configdict['MongoDBPath']!="":
+			client = MongoClient(configdict['MongoDBPath'])
+			if configdict['MongoDBUserName']!="" and configdict['MongoDBPassword']!="":
+                                client.the_database.authenticate(configdict['MongoDBUserName'],configdict['MongoDBPassword'],source=self.mdb)
+                		storedb = client[self.db]
+                		collection = storedb["zattooasr"]
+                		corpus_en=[]
+               			corpus_de=[]
+                		corpus_it=[]
+                		corpus_es=[]
+                		corpus_en_id=[]
+                		corpus_de_id=[]
+                		corpus_it_id=[]
+                		corpus_es_id=[]
+                		for p in collection.find():
+                             		if p["Lang"]=="en" and p["SpeechToText"]!="":
+                                        	corpus_en.append(p["SpeechToText"].strip().strip("\n").encode('utf-8', 'replace').decode("utf-8"))
+						corpus_en_id.append(str(p['_id']))
+                                	elif p["Lang"]=="de" and p["SpeechToText"]!="":
+                                        	corpus_de.append(p["SpeechToText"].strip().strip("\n").encode('utf-8', 'replace'))
+						corpus_de_id.append(str(p['_id']))
+                                	elif p["Lang"]=="it" and p["SpeechToText"]!="":
+                                        	corpus_it.append(p["SpeechToText"].strip().strip("\n").encode('utf-8', 'replace'))
+						corpus_it_id.append(str(p['_id']))
+                                	elif p["Lang"]=="es" and p["SpeechToText"]!="":
+                                        	corpus_es.append(p["SpeechToText"].strip().strip("\n").encode('utf-8', 'replace'))
+						corpus_es_id.append(str(p['_id']))
 
-		if len(corpus_en)>0 and len(corpus_en_id)>0:
-			try:
-				t1 = Thread(target=self.encorpus, args=(corpus_en,corpus_en_id))
-		                t1.start()
-			except:
-				pass
-		if len(corpus_de)>0 and len(corpus_de_id)>0:
-			try:
-				t2 = Thread(target=self.decorpus, args=(corpus_de,corpus_de_id))
-        		        t2.start()
-			except:
-				pass
-		'''
-		if len(corpus_it)>0 and len(corpus_it_id)>0:
-			try:
-				t3 = Thread(target=self.itcorpus, args=(corpus_it,corpus_it_id))
-        		        t3.start()
-			except:
-				pass
-		if len(corpus_es)>0 and len(corpus_es_id)>0:
-			try:
-				t4 = Thread(target=self.escorpus, args=(corpus_es,corpus_es_id))
-        		        t4.start()
-			except:
-				pass
-		'''
+				if len(corpus_en)>0 and len(corpus_en_id)>0:
+					try:
+						t1 = Thread(target=self.encorpus, args=(corpus_en,corpus_en_id))
+		                		t1.start()
+					except:
+						pass
+				if len(corpus_de)>0 and len(corpus_de_id)>0:
+					try:
+						t2 = Thread(target=self.decorpus, args=(corpus_de,corpus_de_id))
+        		       			t2.start()
+					except:
+						pass
+				'''
+				if len(corpus_it)>0 and len(corpus_it_id)>0:
+					try:
+						t3 = Thread(target=self.itcorpus, args=(corpus_it,corpus_it_id))
+        		       			t3.start()
+					except:
+						pass
+				if len(corpus_es)>0 and len(corpus_es_id)>0:
+					try:
+						t4 = Thread(target=self.escorpus, args=(corpus_es,corpus_es_id))
+        		        		t4.start()
+					except:
+						pass
+				'''
+			else:
+				print 'Please Set MongoDB UserName Password in Config file.'
+		else:
+			 print "Please Set MongoDB path in Config file."
 		
 def main():
         database = "VicoStore"

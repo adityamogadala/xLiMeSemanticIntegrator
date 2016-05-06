@@ -147,65 +147,70 @@ class SubNewsToTvIndex:
 		print collection.find({'Title': 'Latest Bulletin'}).count()
 		return (collection.find({'SourceURL': url.strip()}).count())
         def calcsize(self):
-                client = MongoClient('aifb-ls3-merope.aifb.kit.edu',27017)
-                client.the_database.authenticate('vicouser', 'testrun', source=self.db)
-                storedb = client[self.db]
-                collection = storedb["zattoosub"]
-                collection1 = storedb["tvmetadata"]
-                sub_corpus_en=[]
-                sub_corpus_de=[]
-                sub_corpus_it=[]
-                sub_corpus_es=[]
-                sub_corpus_en_id=[]
-                sub_corpus_de_id=[]
-                sub_corpus_it_id=[]
-                sub_corpus_es_id=[]
-                for p in collection.find():
-				#url = "http://zattoo.com/program/"+str(p["SourceURL"].split("/")[-1].strip())
-                             	if p["Lang"]=="en" and p["SubtitlesToText"]!="":
-					#if (self.alreadyExists(collection1,url)>0):
-					sub_corpus_en.append(p["SubtitlesToText"].strip().strip("\n").encode('utf-8', 'replace').decode("utf-8"))
-					sub_corpus_en_id.append(str(p['_id']))
-                                elif p["Lang"]=="de" and p["SubtitlesToText"]!="":
-					#if (self.alreadyExists(collection1,url)>0):
-                                        sub_corpus_de.append(p["SubtitlesToText"].strip().strip("\n").encode('utf-8', 'replace'))
-					sub_corpus_de_id.append(str(p['_id']))
-                                elif p["Lang"]=="it" and p["SubtitlesToText"]!="":
-					#if (self.alreadyExists(collection1,url)>0):
-                                        sub_corpus_it.append(p["SubtitlesToText"].strip().strip("\n").encode('utf-8', 'replace'))
-					sub_corpus_it_id.append(str(p['_id']))
-                                elif p["Lang"]=="es" and p["SubtitlesToText"]!="":
-					#if (self.alreadyExists(collection1,url)>0):
-                                        sub_corpus_es.append(p["SubtitlesToText"].strip().strip("\n").encode('utf-8', 'replace'))
-					sub_corpus_es_id.append(str(p['_id']))
-	#	print len(sub_corpus_de_id)
-	#	print len(sub_corpus_es_id)
-		if len(sub_corpus_en)>0 and len(sub_corpus_en_id)>0:
-			try:
-				t1 = Thread(target=self.encorpus, args=(sub_corpus_en,sub_corpus_en_id))
-		                t1.start()
-			except:
-				pass
-		if len(sub_corpus_de)>0 and len(sub_corpus_de_id)>0:
-			try:
-				t2 = Thread(target=self.decorpus, args=(sub_corpus_de,sub_corpus_de_id))
-        		        t2.start()
-			except:
-				pass
-		'''
-		if len(sub_corpus_it)>0 and len(sub_corpus_it_id)>0:
-			try:
-				t3 = Thread(target=self.itcorpus, args=(sub_corpus_it,sub_corpus_it_id))
-        		        t3.start()
-			except:
-				pass
-		if len(sub_corpus_es)>0 and len(sub_corpus_es_id)>0:
-			try:
-				t4 = Thread(target=self.escorpus, args=(sub_corpus_es,sub_corpus_es_id))
-        		        t4.start()
-			except:
-				pass
-		'''
+		configdict={}
+                config = '../config/Config.conf'
+                with open(config) as config_file:
+                        for lines in config_file:
+                                key = lines.strip('\n').split['=']
+                                configdict[key[0]]=key[1]
+                if configdict['MongoDBPath']!="":
+                        client = MongoClient(configdict['MongoDBPath'])
+			if configdict['MongoDBUserName']!="" and configdict['MongoDBPassword']!="":
+                                client.the_database.authenticate(configdict['MongoDBUserName'],configdict['MongoDBPassword'],source=self.mdb)
+               			storedb = client[self.db]
+                		collection = storedb["zattoosub"]
+                		collection1 = storedb["tvmetadata"]
+                		sub_corpus_en=[]
+                		sub_corpus_de=[]
+                		sub_corpus_it=[]
+                		sub_corpus_es=[]
+                		sub_corpus_en_id=[]
+                		sub_corpus_de_id=[]
+                		sub_corpus_it_id=[]
+                		sub_corpus_es_id=[]
+                		for p in collection.find():
+                        	     		if p["Lang"]=="en" and p["SubtitlesToText"]!="":
+							sub_corpus_en.append(p["SubtitlesToText"].strip().strip("\n").encode('utf-8', 'replace').decode("utf-8"))
+							sub_corpus_en_id.append(str(p['_id']))
+                                		elif p["Lang"]=="de" and p["SubtitlesToText"]!="":
+                                        		sub_corpus_de.append(p["SubtitlesToText"].strip().strip("\n").encode('utf-8', 'replace'))
+							sub_corpus_de_id.append(str(p['_id']))
+                                		elif p["Lang"]=="it" and p["SubtitlesToText"]!="":
+                                        		sub_corpus_it.append(p["SubtitlesToText"].strip().strip("\n").encode('utf-8', 'replace'))
+							sub_corpus_it_id.append(str(p['_id']))
+                                		elif p["Lang"]=="es" and p["SubtitlesToText"]!="":
+                                        		sub_corpus_es.append(p["SubtitlesToText"].strip().strip("\n").encode('utf-8', 'replace'))
+							sub_corpus_es_id.append(str(p['_id']))
+				if len(sub_corpus_en)>0 and len(sub_corpus_en_id)>0:
+					try:
+						t1 = Thread(target=self.encorpus, args=(sub_corpus_en,sub_corpus_en_id))
+		                		t1.start()
+					except:
+						pass
+				if len(sub_corpus_de)>0 and len(sub_corpus_de_id)>0:
+					try:
+						t2 = Thread(target=self.decorpus, args=(sub_corpus_de,sub_corpus_de_id))
+        		       			t2.start()
+					except:
+						pass
+				'''
+				if len(sub_corpus_it)>0 and len(sub_corpus_it_id)>0:
+					try:
+						t3 = Thread(target=self.itcorpus, args=(sub_corpus_it,sub_corpus_it_id))
+        		        		t3.start()
+					except:
+						pass
+				if len(sub_corpus_es)>0 and len(sub_corpus_es_id)>0:
+					try:
+						t4 = Thread(target=self.escorpus, args=(sub_corpus_es,sub_corpus_es_id))
+        		        		t4.start()
+					except:
+						pass
+				'''
+			else:
+				print 'Please Set MongoDB UserName Password in Config file.'
+		else:
+			 print "Please Set MongoDB path in Config file."
 def main():
         database = "VicoStore"
         testmongo = SubNewsToTvIndex(database)

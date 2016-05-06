@@ -1,5 +1,16 @@
 Developed as a part of xLiMe Project (http://xlime.eu/) in work page Cross-Media Semantic Intgeration (WP4)
 
+-------------------------
+Dependencies
+-------------------------
+Code is Written in Python and Java. Also, it depends on:
+
+Python 2.7
+Numpy
+Scipy
+Pymongo  (https://api.mongodb.com/python/current/)
+Rake (https://github.com/aneesha/RAKE)
+Kafka Python Client (https://github.com/dpkp/kafka-python)
 --------------------------
 Related Publications
 ---------------------------

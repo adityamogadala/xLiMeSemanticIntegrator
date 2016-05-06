@@ -97,54 +97,42 @@ class PushToMongoSpeech:
 				return jsonList
 	def MongoData(self):
 		files_in_dir = os.listdir(self.path_to_dir)
-	        client = MongoClient('aifb-ls3-merope.aifb.kit.edu',27017)
-	        client_lei = MongoClient('mongodb://aifb-ls3-remus.aifb.kit.edu:19005') #for lei semantic web challange (ISWC 2015)
-                client.the_database.authenticate('vicouser', 'testrun', source=self.mdb)
-                db = client[self.mdb]
-		db_lei = client_lei['ABIRS']   #for lei semantic web challange (ISWC 2015)
-		storelist=[]
-		for file_in_dir in files_in_dir:
-				if self.topic == "zattoo-asr":
-					jsonStrings = self.GenerateZattooAsr(file_in_dir)
-					bulk = db.zattooasr
-					bulk_lei = db_lei.zattooasr
-					#bulk_lei_2 = db_lei.zattooasr2
-					#bulk_lei_3 = db_lei.zattooasr3
-					if jsonStrings!=None:
-						for values in jsonStrings:
-							if 'SourceURL' in values and 'SpeechToText' in values:
-								#print values
-								zattooid = values["SourceURL"].split("/")[-1].strip()
-								if int(zattooid) > 0 :
-									text = values['SpeechToText']
-							        	rake1 = rake.Rake("SmartStoplist.txt")
-    									keywords = rake1.run(text)
-									try:
-								 		 storelist.append(str(values['CID'])+"\t\t"+str(values['StartTime'])+"\t\t"+str(values['PDSource'])+"\t\t"+str(values['PDTitle'])+"\t\t"+str(values['PDStartTime'])+"\t\t"+str(values['SourceURL'])+"\t\t"+str(values['StreamPosition'])+"\t\t"+str(keywords[0][0].encode('utf-8', 'replace'))+"\t\t"+str(keywords[1][0].encode('utf-8', 'replace'))+"\t\t"+str(keywords[2][0].encode('utf-8', 'replace'))+"\t\t"+str(values['Date'])+"\t\t"+str(values['Lang']))
-									except:
-										pass
-									try:
-										bulk.insert(values,continue_on_error=True)
-									except pymongo.errors.DuplicateKeyError:
-										pass
-									#for lei semantic web challange (ISWC 2015)  --start
-									start = 1000*int(arrow.get(values["StartTime"].strip()).datetime.strftime("%s"))
-			                                                end = start + 40000
-                        			                        watch_url = "http://zattoo.com/watch/"+values["CID"].strip()+"/"+str(zattooid)+"/"+str(start)+"/"+str(end)
-									values['ZattooURL'] = watch_url
-									try:
-										bulk_lei.insert(values,continue_on_error=True)
-									except pymongo.errors.DuplicateKeyError:
-										pass
-									#try:
-									#	bulk_lei_2.insert(values,continue_on_error=True)
-									#except pymongo.errors.DuplicateKeyError:
-									#	pass
-									#try:
-									#	bulk_lei_3.insert(values,continue_on_error=True)
-									#except pymongo.errors.DuplicateKeyError:
-									#	pass
-									#for lei semantic web challange (ISWC 2015)  --end
+		configdict={}
+                config = '../config/Config.conf'
+                with open(config) as config_file:
+                        for lines in config_file:
+                                key = lines.strip('\n').split['=']
+                                configdict[key[0]]=key[1]
+                if configdict['MongoDBPath']!="":
+			client = MongoClient(configdict['MongoDBPath'])
+                        if configdict['MongoDBUserName']!="" and configdict['MongoDBPassword']!="":
+                                client.the_database.authenticate(configdict['MongoDBUserName'],configdict['MongoDBPassword'],source=self.mdb)
+                		db = client[self.mdb]
+				storelist=[]
+				for file_in_dir in files_in_dir:
+						if self.topic == configdict['KafkaTopicASR']:
+							jsonStrings = self.GenerateZattooAsr(file_in_dir)
+							bulk = db.zattooasr
+							if jsonStrings!=None:
+								for values in jsonStrings:
+									if 'SourceURL' in values and 'SpeechToText' in values:
+										zattooid = values["SourceURL"].split("/")[-1].strip()
+										if int(zattooid) > 0 :
+											text = values['SpeechToText']
+							        			rake1 = rake.Rake("SmartStoplist.txt")
+    											keywords = rake1.run(text)
+											try:
+								 				 storelist.append(str(values['CID'])+"\t\t"+str(values['StartTime'])+"\t\t"+str(values['PDSource'])+"\t\t"+str(values['PDTitle'])+"\t\t"+str(values['PDStartTime'])+"\t\t"+str(values['SourceURL'])+"\t\t"+str(values['StreamPosition'])+"\t\t"+str(keywords[0][0].encode('utf-8', 'replace'))+"\t\t"+str(keywords[1][0].encode('utf-8', 'replace'))+"\t\t"+str(keywords[2][0].encode('utf-8', 'replace'))+"\t\t"+str(values['Date'])+"\t\t"+str(values['Lang']))
+											except:
+												pass
+											try:
+												bulk.insert(values,continue_on_error=True)
+											except pymongo.errors.DuplicateKeyError:
+												pass
+			else:
+				print 'Please Set MongoDB UserName Password in Config file.'
+		else:
+			print "Please Set MongoDB path in Config file."
 
 		fil = glob.glob(self.path_to_dir+"*")
 		for f in fil:

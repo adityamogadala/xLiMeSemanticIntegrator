@@ -7,10 +7,7 @@ from pymongo import MongoClient
 import pymongo
 import datetime
 import sys
-#import shutil
 import glob
-#import pprint
-#from bson.objectid import ObjectId
 from pprint import pprint
 
 class ZattooToMongo:
@@ -51,20 +48,31 @@ class ZattooToMongo:
 		return jsonList
 	def MongoData(self):
 		files_in_dir = os.listdir(self.path_to_dir)
-		client = MongoClient('aifb-ls3-merope.aifb.kit.edu',27017)
-		client.the_database.authenticate('vicouser', 'testrun', source=self.mdb)
-		db = client[self.mdb]
-		for file_in_dir in files_in_dir:
-				if self.topic == "zattoo-epg":
-					jsonStrings = self.GenerateTVMetaData(file_in_dir)
-					tvmetadata = db.tvmetadata
-					if len(jsonStrings)!=0:
-						for values in jsonStrings:
-						#	print values
-							try:
-								tvmetadata.insert(values,continue_on_error=True)
-							except pymongo.errors.DuplicateKeyError:
-								pass
+		configdict={}
+		config = '../config/Config.conf'
+		with open(config) as config_file:
+			for lines in config_file:
+				key = lines.strip('\n').split['=']
+				configdict[key[0]]=key[1]
+		if configdict['MongoDBPath']!="":	
+			client = MongoClient(configdict['MongoDBPath'])
+			if configdict['MongoDBUserName']!="" and configdict['MongoDBPassword']!="":
+				client.the_database.authenticate(configdict['MongoDBUserName'],configdict['MongoDBPassword'],source=self.mdb)
+				db = client[self.mdb]
+				for file_in_dir in files_in_dir:
+						if self.topic == configdict['KafkaTopicTVMetadata']:
+							jsonStrings = self.GenerateTVMetaData(file_in_dir)
+							tvmetadata = db.tvmetadata
+							if len(jsonStrings)!=0:
+								for values in jsonStrings:
+									try:
+										tvmetadata.insert(values,continue_on_error=True)
+									except pymongo.errors.DuplicateKeyError:
+										pass
+			else:
+				print 'Please Set MongoDB UserName Password in Config file.'
+		else:
+			print "Please Set MongoDB path in Config file."
 		fil = glob.glob(self.path_to_dir+"*")
 		for f in fil:
 			os.remove(f)

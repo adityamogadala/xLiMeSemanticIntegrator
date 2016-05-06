@@ -33,26 +33,6 @@ class Producer:
         def run(self):
                 mongoobject = NewsToMongo(self.path,self.mongo,self.topic)
                 mongoobject.MongoData()
-              #  client = KafkaClient("aifb-ls3-hebe.aifb.kit.edu:9092")
-               # producer = SimpleProducer(client)
-		#newslist= ["www.20min.ch","www.tagesanzeiger.ch","www.bernerzeitung.ch","www.bazonline.ch","www.derbund.ch","www.lematin.ch","www.tdg.ch","www.24heures.ch","www.solothurnerzeitung.ch","www.aargauerzeitung.ch","www.grenchnertagblatt.ch","www.limmattalerzeitung.ch","www.bzbasel.ch","www.basellandschaftlichezeitung.ch"]
-		#client1 = MongoClient()
-                #client1.the_database.authenticate('vicouser', 'testrun', source=self.mongo)
-                #db1 = client1[self.mongo]
-		#bulk1 = db1.newstvrec
-                #if len(messagelist)!=0:
-                 #       for message in messagelist:
-		#		try:
-		#			bulk1.insert(json.loads(message),continue_on_error=True)
-		#		except pymongo.errors.DuplicateKeyError:
-		#			pass
-		#		try:
-	         #                       urllink = json.loads(message)["jsinewslink"].split("/")[2]
-		#			if urllink.strip() in newslist:
-	        #	                        producer.send_messages('KITNewsTVRecommender', message)
-        	 #       	                time.sleep(1)
-		#		except:
-		#			pass
 class NewsToMongo:
 	def __init__(self, path, mongodatabase,topics):
 		self.path_to_dir = path
@@ -101,20 +81,31 @@ class NewsToMongo:
 		return jsonList
 	def MongoData(self):
 		files_in_dir = os.listdir(self.path_to_dir)
-		client = MongoClient('aifb-ls3-merope.aifb.kit.edu',27017)
-		client.the_database.authenticate('vicouser', 'testrun', source=self.mdb)
-		db = client[self.mdb]
-		for file_in_dir in files_in_dir:
-				if self.topic == "jsi-newsfeed":
-					jsonStrings = self.GenerateNewsFeed(file_in_dir)	
-					bulk = db.jsinewsfeed
-					if len(jsonStrings)!=0:
-						for values in jsonStrings:
-							#print values
-							try:
-								bulk.insert(values,continue_on_error=True)
-							except pymongo.errors.DuplicateKeyError:
-								pass
+		configdict={}
+                config = '../config/Config.conf'
+                with open(config) as config_file:
+                        for lines in config_file:
+                                key = lines.strip('\n').split['=']
+                                configdict[key[0]]=key[1]
+                if configdict['MongoDBPath']!="":	
+			client = MongoClient(configdict['MongoDBPath'])
+                        if configdict['MongoDBUserName']!="" and configdict['MongoDBPassword']!="":
+                                client.the_database.authenticate(configdict['MongoDBUserName'],configdict['MongoDBPassword'],source=self.mdb)
+				db = client[self.mdb]
+				for file_in_dir in files_in_dir:
+						if self.topic == configdict['KafkaTopicNews']:
+							jsonStrings = self.GenerateNewsFeed(file_in_dir)	
+							bulk = db.jsinewsfeed
+							if len(jsonStrings)!=0:
+								for values in jsonStrings:
+									try:
+										bulk.insert(values,continue_on_error=True)
+									except pymongo.errors.DuplicateKeyError:
+										pass
+			else:
+				print 'Please Set MongoDB UserName Password in Config file.'
+		else:
+			print "Please Set MongoDB path in Config file."
 		fil = glob.glob(self.path_to_dir+"*")
 		for f in fil:
 			os.remove(f)

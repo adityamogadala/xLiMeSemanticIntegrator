@@ -76,24 +76,35 @@ class PushToMongoSpeech:
 				return jsonList
 	def MongoData(self):
 		files_in_dir = os.listdir(self.path_to_dir)
-	        client = MongoClient('aifb-ls3-merope.aifb.kit.edu',27017)
-                client.the_database.authenticate('vicouser', 'testrun', source=self.mdb)
-                db = client[self.mdb]
-		#storelist=[]
-		for file_in_dir in files_in_dir:
-				if self.topic == "zattoo-sub":
-					jsonStrings = self.GenerateZattooSub(file_in_dir)
-					bulk = db.zattoosub
-					if jsonStrings!=None:
-						for values in jsonStrings:
-							if 'SourceURL' in values and 'SubtitlesToText' in values:
-								zattooid = values["SourceURL"].split("/")[-1].strip()
-								if int(zattooid) > 0:
-									#print values
-									try:
-										bulk.insert(values,continue_on_error=True)
-									except pymongo.errors.DuplicateKeyError:
-										pass
+		configdict={}
+                config = '../config/Config.conf'
+                with open(config) as config_file:
+                        for lines in config_file:
+                                key = lines.strip('\n').split['=']
+                                configdict[key[0]]=key[1]
+                if configdict['MongoDBPath']!="":
+			client = MongoClient(configdict['MongoDBPath'])
+			if configdict['MongoDBUserName']!="" and configdict['MongoDBPassword']!="":
+                                client.the_database.authenticate(configdict['MongoDBUserName'],configdict['MongoDBPassword'],source=self.mdb)
+                		db = client[self.mdb]
+				for file_in_dir in files_in_dir:
+						if self.topic == configdict["KafkaTopicSubtitles"]:
+							jsonStrings = self.GenerateZattooSub(file_in_dir)
+							bulk = db.zattoosub
+							if jsonStrings!=None:
+								for values in jsonStrings:
+									if 'SourceURL' in values and 'SubtitlesToText' in values:
+										zattooid = values["SourceURL"].split("/")[-1].strip()
+										if int(zattooid) > 0:
+											#print values
+											try:
+												bulk.insert(values,continue_on_error=True)
+											except pymongo.errors.DuplicateKeyError:
+												pass
+			else:
+				print 'Please Set MongoDB UserName Password in Config file.'
+		else:
+			 print "Please Set MongoDB path in Config file."
 
 		fil = glob.glob(self.path_to_dir+"*")
 		for f in fil:

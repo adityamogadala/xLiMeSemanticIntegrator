@@ -52,35 +52,37 @@ class SocialMediaToMongo:
 		return jsonList
 	def MongoData(self):
 		files_in_dir = os.listdir(self.path_to_dir)
-		client = MongoClient('aifb-ls3-merope.aifb.kit.edu',27017)
-		client.the_database.authenticate('vicouser', 'testrun', source=self.mdb)
-		client_lei = MongoClient('mongodb://aifb-ls3-remus.aifb.kit.edu:19005') #for lei semantic web challange (ISWC 2015)
-		db = client[self.mdb]
-		db_lei = client_lei['ABIRS']   #for lei semantic web challange (ISWC 2015)
-		for file_in_dir in files_in_dir:
-				if self.topic == "socialmedia":
-					jsonStrings = self.GenerateSocialData(file_in_dir)	
-					bulk = db.socialmedia
-					bulk_lei = db_lei.socialmedia
-					if len(jsonStrings)!=0:
-						for values in jsonStrings:
-						#	print values
-							tvdate = values["Date"].split()[0].split("-")
-                                                        tvshow = date(int(tvdate[0]),int(tvdate[1]),int(tvdate[2]))
-                                         #              print tvshow
-                                                        datenow = str(datetime.datetime.now()).split()[0].split("-")
-                                                        datetvnow = date(int(datenow[0]),int(datenow[1]),int(datenow[2]))
-                                                        diff_date = abs(datetvnow-tvshow).days
-                                         #               print diff_date
-                                                        if diff_date <=7:
-								try:
-									bulk.insert(values,continue_on_error=True)
-								except pymongo.errors.DuplicateKeyError:
-									pass
-							try:
-								bulk_lei.insert(values,continue_on_error=True)
-							except pymongo.errors.DuplicateKeyError:
-								pass
+		configdict={}
+                config = '../config/Config.conf'
+                with open(config) as config_file:
+                        for lines in config_file:
+                                key = lines.strip('\n').split['=']
+                                configdict[key[0]]=key[1]
+                if configdict['MongoDBPath']!="":
+			client = MongoClient(configdict['MongoDBPath'])
+			if configdict['MongoDBUserName']!="" and configdict['MongoDBPassword']!="":
+                                client.the_database.authenticate(configdict['MongoDBUserName'],configdict['MongoDBPassword'],source=self.mdb)
+				db = client[self.mdb]
+				for file_in_dir in files_in_dir:
+						if self.topic == configdict["KafkaTopicSocialMedia"]:
+							jsonStrings = self.GenerateSocialData(file_in_dir)	
+							bulk = db.socialmedia
+							if len(jsonStrings)!=0:
+								for values in jsonStrings:
+									tvdate = values["Date"].split()[0].split("-")
+                                                        		tvshow = date(int(tvdate[0]),int(tvdate[1]),int(tvdate[2]))
+                                                       			datenow = str(datetime.datetime.now()).split()[0].split("-")
+                                                        		datetvnow = date(int(datenow[0]),int(datenow[1]),int(datenow[2]))
+                                                       			diff_date = abs(datetvnow-tvshow).days
+                                                        		if diff_date <=7:
+										try:
+											bulk.insert(values,continue_on_error=True)
+										except pymongo.errors.DuplicateKeyError:
+											pass
+			else:
+				print 'Please Set MongoDB UserName Password in Config file.'
+		else:
+			print "Please Set MongoDB path in Config file."
 		fil = glob.glob(self.path_to_dir+"*")
 		for f in fil:
 			os.remove(f)

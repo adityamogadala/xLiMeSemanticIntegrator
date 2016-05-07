@@ -11,6 +11,8 @@ Code is Written in Python and Java. Also, it depends on.
 4. Pymongo  (https://api.mongodb.com/python/current/)
 5. Rake (https://github.com/aneesha/RAKE)
 6. Kafka Python Client (https://github.com/dpkp/kafka-python)
+7. MongoDB
+8. Kafka
 
 --------------------------
 Related Publications

@@ -15,17 +15,20 @@ class XlimeAdvancedRecommender:
 		self.asrpath = speechpath
 		self.zattootopic = topic
 		self.db = database
-	def recommender(self):
-		mongoobject = AdvancedSpeechKafkaProcessing.PushToMongoSpeech(self.asrpath,self.zattootopic,self.db)
-		queries = mongoobject.MongoData()
-		#client = MongoClient('',27017)
+	def readConfig(self):
 		configdict={}
                 config = '../config/Config.conf'
                 with open(config) as config_file:
                         for lines in config_file:
                                 if re.search(r'=',lines):
-                                        key = lines.strip('\n').split['=']
+                                        key = lines.strip('\n').split('=')
                                         configdict[key[0]]=key[1]
+		return configdict
+	def recommender(self):
+		mongoobject = AdvancedSpeechKafkaProcessing.PushToMongoSpeech(self.asrpath,self.zattootopic,self.db)
+		queries = mongoobject.MongoData()
+		#client = MongoClient('',27017)
+		configdict=self.readConfig()
                 if configdict['MongoDBPath']!="":
 			client = MongoClient(configdict['MongoDBPath'])
 			if configdict['MongoDBUserName']!="" and configdict['MongoDBPassword']!="":

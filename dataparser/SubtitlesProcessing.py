@@ -20,7 +20,7 @@ class PushToMongoSpeech:
                 with open(config) as config_file:
                         for lines in config_file:
 				if re.search(r'=',lines):
-                                	key = lines.strip('\n').split['=']
+                                	key = lines.strip('\n').split('=')
                                 	configdict[key[0]]=key[1]
 		return configdict
 	def GenerateZattooSub(self,jsonfile):

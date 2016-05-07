@@ -14,6 +14,15 @@ class PushToMongoSpeech:
 		self.path_to_dir = path
 		self.topic = topics
 		self.mdb = mongo
+	def readConfig(self):
+		configdict={}
+                config = '../config/Config.conf'
+                with open(config) as config_file:
+                        for lines in config_file:
+				if re.search(r'=',lines):
+                                	key = lines.strip('\n').split['=']
+                                	configdict[key[0]]=key[1]
+		return configdict
 	def GenerateZattooAsr(self,jsonfile):
 		jsonList = []
 		newjsondict = {}
@@ -97,13 +106,7 @@ class PushToMongoSpeech:
 				return jsonList
 	def MongoData(self):
 		files_in_dir = os.listdir(self.path_to_dir)
-		configdict={}
-                config = '../config/Config.conf'
-                with open(config) as config_file:
-                        for lines in config_file:
-				if re.search(r'=',lines):
-                                	key = lines.strip('\n').split['=']
-                                	configdict[key[0]]=key[1]
+		configdict=self.readConfig()
                 if configdict['MongoDBPath']!="":
 			client = MongoClient(configdict['MongoDBPath'])
                         if configdict['MongoDBUserName']!="" and configdict['MongoDBPassword']!="":

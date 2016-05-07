@@ -10,6 +10,15 @@ import re
 class SubNewsToTvIndex:
         def __init__(self,database):
                 self.db = database
+	def readConfig(self):
+		configdict={}
+                config = '../config/Config.conf'
+                with open(config) as config_file:
+                        for lines in config_file:
+				if re.search(r'=',lines):
+                                	key = lines.strip('\n').split['=']
+                                	configdict[key[0]]=key[1]
+		return configdict
 	def encorpus(self,corpus_en,corpus_en_id):
 		vectorizer = TfidfVectorizer(min_df=1,encoding="utf-8",decode_error="replace")
 		X_en = vectorizer.fit_transform(corpus_en).toarray()
@@ -148,13 +157,7 @@ class SubNewsToTvIndex:
 		print collection.find({'Title': 'Latest Bulletin'}).count()
 		return (collection.find({'SourceURL': url.strip()}).count())
         def calcsize(self):
-		configdict={}
-                config = '../config/Config.conf'
-                with open(config) as config_file:
-                        for lines in config_file:
-				if re.search(r'=',lines):
-                                	key = lines.strip('\n').split['=']
-                                	configdict[key[0]]=key[1]
+		configdict=self.readConfig()
                 if configdict['MongoDBPath']!="":
                         client = MongoClient(configdict['MongoDBPath'])
 			if configdict['MongoDBUserName']!="" and configdict['MongoDBPassword']!="":

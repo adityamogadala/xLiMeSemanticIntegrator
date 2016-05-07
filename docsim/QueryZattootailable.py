@@ -17,6 +17,15 @@ class TestMongoSize:
 		self.db = database
 		self.address = clientaddress
 		self.port = port
+	def readConfig(self):
+		configdict={}
+                config = '../config/Config.conf'
+                with open(config) as config_file:
+                        for lines in config_file:
+                                if re.search(r'=',lines):
+                                        key = lines.strip('\n').split['=']
+                                        configdict[key[0]]=key[1]
+                return configdict
 	def CompareNewsToZattoo(self,collection2,final_vector,lang1,language):
 		reclist = []
 		if (lang1=="de"):
@@ -109,9 +118,6 @@ class TestMongoSize:
 			dic = collection2.find_one({"_id": ObjectId(matrix1[docs[0]])})
 			zattoo_dict = {}
 			tea = dic["SourceURL"].split("/")[-1].strip()
-			#zattoo_dict["zattooid"]=tea
-			#zattoo_dict["streamposition"] = dic["StreamPosition"].strip()
-			#zattoo_dict["starttime"] = dic["StartTime"].strip()
 			zattoo_dict["cid"] = dic["CID"].strip()
 			zattoo_dict["simscore"] = 1-val[0]
 			start = 1000*int(arrow.get(dic["StartTime"].strip()).datetime.strftime("%s"))
@@ -192,22 +198,29 @@ class TestMongoSize:
 			except pymongo.errors.DuplicateKeyError:
 				pass
 	def calcsize(self):
-		client = MongoClient(self.address,self.port)
-		client.the_database.authenticate('vicouser', 'testrun', source=self.db)
-		storedb = client[self.db]
-		collection5 = storedb["tailablequeryzattoo"]
-		collection2 = storedb["zattooasr"]
-		collection3 = storedb["zattoosub"]
-		bulk = storedb.returnzattoorec
-		#collection5.insert({"Lang":"de", "Text":"test"}) test document
-		cursor = collection5.find(tailable=True,await_data=True)
-		while cursor.alive:
-			try:
-				doc = cursor.next()
-				if doc!="":
-					self.pushrec(doc,collection2,collection3,bulk)
-			except StopIteration:
-				time.sleep(0.1)
+		configdict=self.readConfig()
+                if configdict['MongoDBPath']!="":
+			client = MongoClient(configdict['MongoDBPath'])
+			if configdict['MongoDBUserName']!="" and configdict['MongoDBPassword']!="":
+                                client.the_database.authenticate(configdict['MongoDBUserName'],configdict['MongoDBPassword'],source=self.mdb)
+				storedb = client[self.db]
+				collection5 = storedb["tailablequeryzattoo"]
+				collection2 = storedb["zattooasr"]
+				collection3 = storedb["zattoosub"]
+				bulk = storedb.returnzattoorec
+				#collection5.insert({"Lang":"de", "Text":"test"}) test document
+				cursor = collection5.find(tailable=True,await_data=True)
+				while cursor.alive:
+					try:
+						doc = cursor.next()
+						if doc!="":
+							self.pushrec(doc,collection2,collection3,bulk)
+					except StopIteration:
+						time.sleep(0.1)
+			else:
+				print 'Please Set MongoDB UserName Password in Config file.'
+		else:
+			print 'Please Set MongoDB path in Config file.'
 	def docvectors(self,shelvedb,tokens,doc_vector,final_vector):
 		for token in tokens:
 			try:

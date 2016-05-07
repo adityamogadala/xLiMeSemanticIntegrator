@@ -56,8 +56,9 @@ class SocialMediaToMongo:
                 config = '../config/Config.conf'
                 with open(config) as config_file:
                         for lines in config_file:
-                                key = lines.strip('\n').split['=']
-                                configdict[key[0]]=key[1]
+				if re.search(r'=',lines):
+                                	key = lines.strip('\n').split['=']
+                                	configdict[key[0]]=key[1]
                 if configdict['MongoDBPath']!="":
 			client = MongoClient(configdict['MongoDBPath'])
 			if configdict['MongoDBUserName']!="" and configdict['MongoDBPassword']!="":

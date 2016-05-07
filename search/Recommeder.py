@@ -2,7 +2,6 @@
 import commands
 import time
 import sys
-import StaticalRecommender
 import AdvancedStaticalRecommender
 import threading, logging, time
 from kafka.client import KafkaClient
@@ -11,7 +10,7 @@ import pymongo
 from pymongo import MongoClient
 class RecFromMongo:
 	def continous_java_run(self,topic):
-		tot = "java -cp kafkaextractor.jar:. aifb.kit.xlime.kafkaextracor.RunExtractor "+topic+" KITVm3Consumer"
+		tot = "java -cp ../utils/kafkaextractor.jar:. aifb.kit.xlime.kafkaextracor.RunExtractor "+topic+" KITVm3Consumer"
 		vals = commands.getoutput(tot)
 class Producer(threading.Thread):
     daemon=True
@@ -19,7 +18,6 @@ class Producer(threading.Thread):
         path = "../storedata/zattoo-asr/"
         topic = "zattoo-asr"
         database = "VicoStore"
-        #xlimerec = StaticalRecommender.XlimeRecommender(path,topic,database)
         xlimerec = AdvancedStaticalRecommender.XlimeAdvancedRecommender(path,topic,database)
         messagelist = xlimerec.recommender()
         client = KafkaClient("aifb-ls3-hebe.aifb.kit.edu:9092")

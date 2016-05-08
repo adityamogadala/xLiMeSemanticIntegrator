@@ -14,6 +14,15 @@ Code is Written in Python and Java. Also, it depends on.
 7. MongoDB
 8. Kafka
 
+
+-------------------------
+xLiMe Deliverables
+-------------------------
+
+1. (D4.1) Statistical Content Linking (http://xlime.eu/images/Deliverables/xLiMe_D4.1_Statistical_Content_Linking_Prototype.pdf)
+2. (D4.2) Semantic Disambiguation (http://xlime.eu/images/Deliverables/xLiMe_D4.2_Semantic_Disambiguation_without_paper.pdf)
+
+
 --------------------------
 Related Publications
 ---------------------------

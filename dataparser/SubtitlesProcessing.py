@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+#==============================================================================
 #Description     : Get and convert Subtitles data in RDF format to JSON from Kafka and push it to MongoDB.
 #Author          : Aditya Mogadala 
 #email           : aditya.mogadala@kit.edu
@@ -10,11 +11,8 @@ import os
 import re
 import sys
 import glob
-import rake
 from pymongo import MongoClient
 import pymongo
-import pprint
-import arrow
 class PushToMongoSpeech:
 	def __init__(self, path,mongo,topics):
 		self.path_to_dir = path
@@ -38,7 +36,6 @@ class PushToMongoSpeech:
 			for item in data["@graph"]:
 				jsonString={}
 				for items in item["@graph"]:
-#						pprint.pprint(items)
 						source = items["@id"]
 						zattoosource=""
 						if (re.search(r'zattoo.com/processed', source)):
@@ -106,7 +103,6 @@ class PushToMongoSpeech:
 									if 'SourceURL' in values and 'SubtitlesToText' in values:
 										zattooid = values["SourceURL"].split("/")[-1].strip()
 										if int(zattooid) > 0:
-											#print values
 											try:
 												bulk.insert(values,continue_on_error=True)
 											except pymongo.errors.DuplicateKeyError:
@@ -119,17 +115,3 @@ class PushToMongoSpeech:
 		fil = glob.glob(self.path_to_dir+"*")
 		for f in fil:
 			os.remove(f)
-		#return storelist
-'''
-def main():
-	if len(sys.argv)!=3:
-		print "Usage: Enter Arg-1) Path to DataStorage  Arg-2) Topic"
-		sys.exit()
-	path = sys.argv[1]
-        topic = sys.argv[2]
-	mongo = "VicoStore"
-	mongoobject = PushToMongoSpeech(path,mongo,topic)
-	mongoobject.MongoData()
-if  __name__ =='__main__':
-	main()
-'''

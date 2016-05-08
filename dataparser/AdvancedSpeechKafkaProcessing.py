@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+#==============================================================================
 #Description     : Get and convert Speech to Text Data in RDF format to JSON from Kafka and push it to MongoDB
 #Author          : Aditya Mogadala 
 #email           : aditya.mogadala@kit.edu
@@ -13,8 +14,8 @@ import glob
 import rake
 from pymongo import MongoClient
 import pymongo
-import pprint
 import arrow
+import time
 class PushToMongoSpeech:
 	def __init__(self, path, topics,mongo):
 		self.path_to_dir = path
@@ -38,7 +39,6 @@ class PushToMongoSpeech:
 			for item in data["@graph"]:
 				jsonString={}
 				for items in item["@graph"]:
-#						pprint.pprint(items)
 						source = items["@id"]
 						zattoosource=""
 						if (re.search(r'zattoo.com/processed', source)):
@@ -128,21 +128,23 @@ class PushToMongoSpeech:
 									if 'SourceURL' in values and 'SpeechToText' in values:
 										zattooid = values["SourceURL"].split("/")[-1].strip()
 										if int(zattooid) > 0 :
-											text = values['SpeechToText']
-							        			rake1 = rake.Rake("SmartStoplist.txt")
-    											keywords = rake1.run(text)
-											try:
-												start = 1000*int(arrow.get(values["StartTime"].strip()).datetime.strftime("%s"))
-												end = start + 40000
-												watch_url = "http://zattoo.com/watch/"+values["CID"].strip()+"/"+str(zattooid)+"/"+str(start)+"/"+str(end)
-												values['ZattooURL'] = watch_url
-												storelist.append(str(values['CID'])+"\t\t"+str(values['StartTime'])+"\t\t"+str(values['PDSource'])+"\t\t"+str(values['PDTitle'])+"\t\t"+str(values['PDStartTime'])+"\t\t"+str(values['ZattooURL'])+"\t\t"+str(values['StreamPosition'])+"\t\t"+str(keywords[0][0].encode('utf-8', 'replace'))+"\t\t"+str(keywords[1][0].encode('utf-8', 'replace'))+"\t\t"+str(keywords[2][0].encode('utf-8', 'replace'))+"\t\t"+str(values['Date'])+"\t\t"+str(values['Lang']))
-											except:
-												pass
+											start = 1000*int(arrow.get(values["StartTime"].strip()).datetime.strftime("%s"))
+											end = start + 40000
+											watch_url = "http://zattoo.com/watch/"+values["CID"].strip()+"/"+str(zattooid)+"/"+str(start)+"/"+str(end)
+											values['ZattooURL'] = watch_url
 											try:
 												bulk.insert(values,continue_on_error=True)
 											except pymongo.errors.DuplicateKeyError:
 												pass
+											'''
+											text = values['SpeechToText']
+							        			rake1 = rake.Rake("SmartStoplist.txt")
+    											keywords = rake1.run(text)
+											try:
+												storelist.append(str(values['CID'])+"\t\t"+str(values['StartTime'])+"\t\t"+str(values['PDSource'])+"\t\t"+str(values['PDTitle'])+"\t\t"+str(values['PDStartTime'])+"\t\t"+str(values['ZattooURL'])+"\t\t"+str(values['StreamPosition'])+"\t\t"+str(keywords[0][0].encode('utf-8', 'replace'))+"\t\t"+str(keywords[1][0].encode('utf-8', 'replace'))+"\t\t"+str(keywords[2][0].encode('utf-8', 'replace'))+"\t\t"+str(values['Date'])+"\t\t"+str(values['Lang']))
+											except:
+												pass
+											'''
 			else:
 				print 'Please Set MongoDB UserName Password in Config file.'
 		else:
@@ -151,19 +153,4 @@ class PushToMongoSpeech:
 		fil = glob.glob(self.path_to_dir+"*")
 		for f in fil:
 			os.remove(f)
-		return storelist
-'''
-def main():
-	if len(sys.argv)!=3:
-		print "Usage: Enter Arg-1) Path to DataStorage  Arg-2) Topic"
-		sys.exit()
-	path = sys.argv[1]
-        topic = sys.argv[2]
-	mongo = "VicoStore"
-	mongoobject = PushToMongoSpeech(path,topic,mongo)
-	j = mongoobject.MongoData()
-	for i in j:
-		print i
-if  __name__ =='__main__':
-	main()
-'''
+#		return storelist

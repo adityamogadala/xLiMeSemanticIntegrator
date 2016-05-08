@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+#==============================================================================
 #Description     : Get and convert News data in RDF format to JSON from Kafka and push it to MongoDB.
 #Author          : Aditya Mogadala 
 #email           : aditya.mogadala@kit.edu
@@ -11,26 +12,9 @@ import re
 from pymongo import MongoClient
 import pymongo
 import datetime
-import sys
-#import shutil
 import glob
-#import pprint
-from pprint import pprint
-import datetime
 from datetime import date
-#####################################
-from bson.objectid import ObjectId
-import shelve
-import cPickle as pickle
-import numpy as np
-from scipy.spatial import distance
-from gensim import utils
-import arrow
 
-import threading, logging, time
-from kafka.client import KafkaClient
-from kafka.producer import SimpleProducer
-#######################################
 class Producer:
         def __init__(self, path, mongodatabase,topics):
                 self.path = path
@@ -60,7 +44,6 @@ class NewsToMongo:
 			data = json.load(json_data)
 			for item in data["@graph"]:
 				for items in item["@graph"]:
-#					pprint(items)
 					if re.search(r'ijs.si/article',items["@id"]):
 						try:
 							dateitem = items["dcterms:created"]["@value"]
@@ -119,16 +102,3 @@ class NewsToMongo:
 		fil = glob.glob(self.path_to_dir+"*")
 		for f in fil:
 			os.remove(f)
-'''
-def main():
-	if len(sys.argv)!=3:
-		print "Usage: Enter Arg-1) Path to DataStorage  Arg-2) Topic"
-		sys.exit()
-	path = sys.argv[1]
-        topic = sys.argv[2]
-	mongo = "VicoStore"
-	mongoobject = Producer(path,mongo,topic)
-	mongoobject.run()
-if  __name__ =='__main__':
-	main()
-'''

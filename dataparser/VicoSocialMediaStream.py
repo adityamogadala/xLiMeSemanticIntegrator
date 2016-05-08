@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+#==============================================================================
 #Description     : Get and convert Social Media data in RDF format to JSON from Kafka and push it to MongoDB.
 #Author          : Aditya Mogadala 
 #email           : aditya.mogadala@kit.edu
@@ -10,13 +11,7 @@ import os
 import re
 from pymongo import MongoClient
 import pymongo
-import datetime
-import sys
-#import shutil
 import glob
-#import pprint
-#from bson.objectid import ObjectId
-from pprint import pprint
 import datetime
 from datetime import date
 
@@ -79,16 +74,10 @@ class SocialMediaToMongo:
 							bulk = db.socialmedia
 							if len(jsonStrings)!=0:
 								for values in jsonStrings:
-									tvdate = values["Date"].split()[0].split("-")
-                                                        		tvshow = date(int(tvdate[0]),int(tvdate[1]),int(tvdate[2]))
-                                                       			datenow = str(datetime.datetime.now()).split()[0].split("-")
-                                                        		datetvnow = date(int(datenow[0]),int(datenow[1]),int(datenow[2]))
-                                                       			diff_date = abs(datetvnow-tvshow).days
-                                                        		if diff_date <=7:
-										try:
-											bulk.insert(values,continue_on_error=True)
-										except pymongo.errors.DuplicateKeyError:
-											pass
+									try:
+										bulk.insert(values,continue_on_error=True)
+									except pymongo.errors.DuplicateKeyError:
+										pass
 			else:
 				print 'Please Set MongoDB UserName Password in Config file.'
 		else:
@@ -96,16 +85,3 @@ class SocialMediaToMongo:
 		fil = glob.glob(self.path_to_dir+"*")
 		for f in fil:
 			os.remove(f)
-'''
-def main():
-	if len(sys.argv)!=3:
-		print "Usage: Enter Arg-1) Path to DataStorage  Arg-2) Topic"
-		sys.exit()
-	path = sys.argv[1]
-        topic = sys.argv[2]
-	mongo = "VicoStore"
-	mongoobject = PushToMongo(path,mongo,topic)
-	mongoobject.MongoData()
-if  __name__ =='__main__':
-	main()
-'''

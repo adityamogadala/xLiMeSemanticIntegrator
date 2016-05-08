@@ -69,7 +69,8 @@ class ZattooToMongo:
 				for file_in_dir in files_in_dir:
 						if self.topic == configdict['KafkaTopicTVMetadata']:
 							jsonStrings = self.GenerateTVMetaData(file_in_dir)
-							tvmetadata = db.tvmetadata
+							mongocoll = str(configdict['KafkaTopicTVMetadata'])
+							tvmetadata = db.mongocoll
 							if len(jsonStrings)!=0:
 								for values in jsonStrings:
 									try:

@@ -122,7 +122,8 @@ class PushToMongoSpeech:
 				for file_in_dir in files_in_dir:
 						if self.topic == configdict['KafkaTopicASR']:
 							jsonStrings = self.GenerateZattooAsr(file_in_dir)
-							bulk = db.zattooasr
+							mongocoll = str(configdict['KafkaTopicASR'])
+							bulk = db.mongocoll
 							if jsonStrings!=None:
 								for values in jsonStrings:
 									if 'SourceURL' in values and 'SpeechToText' in values:
@@ -136,15 +137,6 @@ class PushToMongoSpeech:
 												bulk.insert(values,continue_on_error=True)
 											except pymongo.errors.DuplicateKeyError:
 												pass
-											'''
-											text = values['SpeechToText']
-							        			rake1 = rake.Rake("SmartStoplist.txt")
-    											keywords = rake1.run(text)
-											try:
-												storelist.append(str(values['CID'])+"\t\t"+str(values['StartTime'])+"\t\t"+str(values['PDSource'])+"\t\t"+str(values['PDTitle'])+"\t\t"+str(values['PDStartTime'])+"\t\t"+str(values['ZattooURL'])+"\t\t"+str(values['StreamPosition'])+"\t\t"+str(keywords[0][0].encode('utf-8', 'replace'))+"\t\t"+str(keywords[1][0].encode('utf-8', 'replace'))+"\t\t"+str(keywords[2][0].encode('utf-8', 'replace'))+"\t\t"+str(values['Date'])+"\t\t"+str(values['Lang']))
-											except:
-												pass
-											'''
 			else:
 				print 'Please Set MongoDB UserName Password in Config file.'
 		else:
@@ -153,4 +145,3 @@ class PushToMongoSpeech:
 		fil = glob.glob(self.path_to_dir+"*")
 		for f in fil:
 			os.remove(f)
-#		return storelist

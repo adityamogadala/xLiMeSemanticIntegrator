@@ -70,8 +70,9 @@ class SocialMediaToMongo:
 				db = client[self.mdb]
 				for file_in_dir in files_in_dir:
 						if self.topic == configdict["KafkaTopicSocialMedia"]:
-							jsonStrings = self.GenerateSocialData(file_in_dir)	
-							bulk = db.socialmedia
+							jsonStrings = self.GenerateSocialData(file_in_dir)
+							mongocoll = str(configdict["KafkaTopicSocialMedia"])	
+							bulk = db.mongocoll
 							if len(jsonStrings)!=0:
 								for values in jsonStrings:
 									try:

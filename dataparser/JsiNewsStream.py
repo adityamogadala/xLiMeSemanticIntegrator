@@ -87,8 +87,9 @@ class NewsToMongo:
 				db = client[self.mdb]
 				for file_in_dir in files_in_dir:
 						if self.topic == configdict['KafkaTopicNews']:
-							jsonStrings = self.GenerateNewsFeed(file_in_dir)	
-							bulk = db.jsinewsfeed
+							jsonStrings = self.GenerateNewsFeed(file_in_dir)
+							mongocoll = str(configdict['KafkaTopicNews'])	
+							bulk = db.mongocoll
 							if len(jsonStrings)!=0:
 								for values in jsonStrings:
 									try:

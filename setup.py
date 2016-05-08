@@ -12,7 +12,7 @@ def readConfig():
 def createFolders():
 	params = readConfig()
 	for key,value in params.iteritems():
-		if re.search(r'^Kafka',key):
+		if re.search(r'^KafkaTopic',key):
 			if not os.path.exists('./storedata/'+value):
 				os.makedirs('./storedata/'+value)
 def main():

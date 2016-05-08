@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+#Description     : Support Queries for long vs short document comparison.
+#Author          : Aditya Mogadala 
+#email           : aditya.mogadala@kit.edu
+#Version         : 1.0.1
+#Copyright       : Institute AIFB, Karlsruhe Institute of Technology (KIT)
+#==============================================================================
 import pymongo
 from pymongo import MongoClient
 #from pymongo import Connection

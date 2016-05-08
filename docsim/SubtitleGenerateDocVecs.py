@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+#Description     : Compares News Document (long) with subtitles (short) snippets.
+#Author          : Aditya Mogadala 
+#email           : aditya.mogadala@kit.edu
+#Version         : 1.0.1
+#Copyright       : Institute AIFB, Karlsruhe Institute of Technology (KIT)
+#==============================================================================
 from sklearn.feature_extraction.text import TfidfVectorizer
 from pymongo import MongoClient
 import shelve

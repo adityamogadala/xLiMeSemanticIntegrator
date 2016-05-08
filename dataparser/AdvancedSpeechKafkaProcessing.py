@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+#Description     : Get and convert Speech to Text Data in RDF format to JSON from Kafka and push it to MongoDB
+#Author          : Aditya Mogadala 
+#email           : aditya.mogadala@kit.edu
+#Version         : 1.0.1
+#Copyright       : Institute AIFB, Karlsruhe Institute of Technology (KIT)
+#==============================================================================
 import json
 import os
 import re
@@ -126,7 +132,11 @@ class PushToMongoSpeech:
 							        			rake1 = rake.Rake("SmartStoplist.txt")
     											keywords = rake1.run(text)
 											try:
-								 				 storelist.append(str(values['CID'])+"\t\t"+str(values['StartTime'])+"\t\t"+str(values['PDSource'])+"\t\t"+str(values['PDTitle'])+"\t\t"+str(values['PDStartTime'])+"\t\t"+str(values['SourceURL'])+"\t\t"+str(values['StreamPosition'])+"\t\t"+str(keywords[0][0].encode('utf-8', 'replace'))+"\t\t"+str(keywords[1][0].encode('utf-8', 'replace'))+"\t\t"+str(keywords[2][0].encode('utf-8', 'replace'))+"\t\t"+str(values['Date'])+"\t\t"+str(values['Lang']))
+												start = 1000*int(arrow.get(values["StartTime"].strip()).datetime.strftime("%s"))
+												end = start + 40000
+												watch_url = "http://zattoo.com/watch/"+values["CID"].strip()+"/"+str(zattooid)+"/"+str(start)+"/"+str(end)
+												values['ZattooURL'] = watch_url
+												storelist.append(str(values['CID'])+"\t\t"+str(values['StartTime'])+"\t\t"+str(values['PDSource'])+"\t\t"+str(values['PDTitle'])+"\t\t"+str(values['PDStartTime'])+"\t\t"+str(values['ZattooURL'])+"\t\t"+str(values['StreamPosition'])+"\t\t"+str(keywords[0][0].encode('utf-8', 'replace'))+"\t\t"+str(keywords[1][0].encode('utf-8', 'replace'))+"\t\t"+str(keywords[2][0].encode('utf-8', 'replace'))+"\t\t"+str(values['Date'])+"\t\t"+str(values['Lang']))
 											except:
 												pass
 											try:

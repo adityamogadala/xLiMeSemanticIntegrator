@@ -1,3 +1,9 @@
+#Description     : Provides Initial Setup.
+#Author          : Aditya Mogadala 
+#email           : aditya.mogadala@kit.edu
+#Version         : 1.0.1
+#Copyright       : Institute AIFB, Karlsruhe Institute of Technology (KIT)
+#==============================================================================
 import re
 import os
 def readConfig():

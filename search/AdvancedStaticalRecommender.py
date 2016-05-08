@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+#Description     : Search MongoDB collections.
+#Author          : Aditya Mogadala 
+#email           : aditya.mogadala@kit.edu
+#Version         : 1.0.1
+#Copyright       : Institute AIFB, Karlsruhe Institute of Technology (KIT)
+#==============================================================================
 import pymongo
 from pymongo import MongoClient
 from pprint import pprint
@@ -110,33 +117,3 @@ class XlimeAdvancedRecommender:
 						dict_py["jsinewsrec"] = rec_jsi
 					finallist.append(json.dumps(dict_py))
 				return finallist
-'''
-class Producer(threading.Thread):
-    daemon=True
-    def run(self):
-    	path = "storedata/zattoo-asr/"
-	topic = "zattoo-asr"
-	database = "VicoStore"
-	xlimerec = XlimeRecommender(path,topic,database)
-	messagelist = xlimerec.recommender()
-        client = KafkaClient("aifb-ls3-hebe.aifb.kit.edu:9092")
-        producer = SimpleProducer(client)
-#	print messagelist
-	for message in messagelist:
-#		pprint(message)
-		producer.send_messages('KITRecommendations', message)
-		time.sleep(1)
-
-def main():
-	threads = [Producer()]
-	for t in threads:
-		t.start()
-	time.sleep(5)
-
-if __name__ == "__main__":
-	logging.basicConfig(
-        format='%(asctime)s.%(msecs)s:%(name)s:%(thread)d:%(levelname)s:%(process)d:%(message)s',
-        level=logging.DEBUG
-        )
-	main()
-'''

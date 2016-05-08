@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+#Description     : Call Search MongoDB collections.
+#Author          : Aditya Mogadala 
+#email           : aditya.mogadala@kit.edu
+#Version         : 1.0.1
+#Copyright       : Institute AIFB, Karlsruhe Institute of Technology (KIT)
+#==============================================================================
 import commands
 import time
 import sys

@@ -1,4 +1,3 @@
-Developed as a part of xLiMe Project (http://xlime.eu/) in work page Cross-Media Semantic Intgeration (WP4)
 
 -------------------------
 Dependencies

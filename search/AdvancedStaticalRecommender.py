@@ -8,16 +8,10 @@
 #==============================================================================
 import pymongo
 from pymongo import MongoClient
-from pprint import pprint
 import json
-import sys
-import threading, logging, time
-from kafka.client import KafkaClient
-from kafka.producer import SimpleProducer
-import AdvancedSpeechKafkaProcessing
-import datetime
-from datetime import date
 import itertools
+import sys
+sys.path.insert(0, '../utils')
 import rake
 class XlimeAdvancedRecommender:
 	def __init__(self, speechpath, topic, database):
@@ -50,7 +44,7 @@ class XlimeAdvancedRecommender:
 					rec_vico=[]
 					rec_jsi=[]
 					dict_py = {}
-					rake1 = rake.Rake("SmartStoplist.txt")
+					rake1 = rake.Rake("../utils/SmartStoplist.txt")
 					vals = rake1.run(query)
 					val1 = vals[0][0].encode('utf-8', 'replace')
 					val2 = vals[1][0].encode('utf-8', 'replace')

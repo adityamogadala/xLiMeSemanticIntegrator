@@ -13,7 +13,7 @@ import sys
 import glob
 from pymongo import MongoClient
 import pymongo
-class PushToMongoSpeech:
+class PushToMongoSubtitles:
 	def __init__(self, path,mongo,topics):
 		self.path_to_dir = path
 		self.topic = topics

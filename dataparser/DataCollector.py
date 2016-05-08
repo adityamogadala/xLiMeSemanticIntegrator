@@ -13,6 +13,7 @@ import VicoSocialMediaStream
 import ZattooTvMetadata
 import JsiNewsStream
 import SubtitlesProcessing
+import AdvancedSpeechKafkaProcessing
 from threading import Thread
 class AutomatePushToMongo:
 	def __init__(self,path,mongo,confdict):
@@ -20,14 +21,7 @@ class AutomatePushToMongo:
 		self.mongo = mongo
 		self.confdicts = confdict
 	def continous_java_run(self,topic):
-		if topic==self.confdicts['KafkaTopicSubtitles']:
-			tot = "java -cp ../utils/kafkaextractor_largest.jar:. aifb.kit.xlime.kafkaextracor.RunExtractor "+topic+" KITCacher1"
-		elif topic==self.confdicts['KafkaTopicNews']:
-			tot = "java -cp ../utils/kafkaextractor_largest.jar:. aifb.kit.xlime.kafkaextracor.RunExtractor "+topic+" KITCachernew1"
-		elif topic==self.confdicts['KafkaTopicSocialMedia']:
-			tot = "java -cp ../utils/kafkaextractor.jar:. aifb.kit.xlime.kafkaextracor.RunExtractor "+topic+" KITRestartSocial"
-		else:
-			tot = "java -cp ../utils/kafkaextractor.jar:. aifb.kit.xlime.kafkaextracor.RunExtractor "+topic+" KITVm3Consumer1"
+		tot = "java -cp ../utils/kafkaextractor.jar:. aifb.kit.xlime.kafkaextracor.RunExtractor "+topic+" MyConsumer"
 		vals = commands.getoutput(tot)
 		time.sleep(2)
 	def continous_mongo_socialmedia(self):
@@ -38,13 +32,18 @@ class AutomatePushToMongo:
 	def continous_mongo_zattoosub(self):
 		topic=self.confdicts['KafkaTopicSubtitles']
 		path1=self.path+topic+"/"
-	        sm = SubtitlesProcessing.PushToMongoSpeech(path1,self.mongo,topic)
+	        sm = SubtitlesProcessing.PushToMongoSubtitles(path1,self.mongo,topic)
         	sm.MongoData()
 	def continous_mongo_zattooepg(self):
 		topic=self.confdicts['KafkaTopicTVMetadata']
 		path1=self.path+topic+"/"
 	        metadata = ZattooTvMetadata.ZattooToMongo(path1,self.mongo,topic)
         	metadata.MongoData()
+	def continous_mongo_zattooasr(self):
+		topic=self.confdicts['KafkaTopicASR']
+		path1=self.path+topic+"/"
+	        asrdata = AdvancedSpeechKafkaProcessing.PushToMongoSpeech(path1,self.mongo,topic)
+        	asrdata.MongoData()
 	def continous_mongo_news(self):
 		topic=self.confdicts['KafkaTopicNews']
 		path1=self.path+topic+"/"
@@ -72,6 +71,8 @@ def main():
 		t0.start()
    		t6 = Thread(target=generatedata.continous_java_run, args=(confdict['KafkaTopicSubtitles'],))
 		t6.start()
+   		t8 = Thread(target=generatedata.continous_java_run, args=(confdict['KafkaTopicASR'],))
+		t8.start()
 		t3 = Thread(target=generatedata.continous_mongo_socialmedia)
 		t3.start()
 		t4=Thread(target=generatedata.continous_mongo_zattooepg)
@@ -80,6 +81,8 @@ def main():
 		t5.start()
 		t7=Thread(target=generatedata.continous_mongo_zattoosub)
 		t7.start()
+		t9=Thread(target=generatedata.continous_mongo_zattooasr)
+		t9.start()
 ##### Add more here to support different types of data #######################
 	except:
 		pass	

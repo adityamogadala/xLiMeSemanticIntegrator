@@ -1,3 +1,12 @@
+# -*- coding: utf-8 -*-
+#==============================================================================
+#Description     : Create vectors for SpeechtoText, Subtitles etc..
+#Author          : Aditya Mogadala 
+#email           : aditya.mogadala@kit.edu
+#Version         : 1.0.1
+#Copyright       : Institute AIFB, Karlsruhe Institute of Technology (KIT)
+#==============================================================================
+
 import TVStoTDocVectors
 import TVSubDocVectors
 import re

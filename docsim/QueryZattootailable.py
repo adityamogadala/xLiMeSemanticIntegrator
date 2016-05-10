@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-#Description     : Support Queries for long vs short document comparison.
+#==============================================================================
+#Description     : Compare News (long) vs Speech to Text or Subtitles (short) documents.
 #Author          : Aditya Mogadala 
 #email           : aditya.mogadala@kit.edu
 #Version         : 1.0.1

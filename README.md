@@ -1,4 +1,6 @@
 
+A framework developed in work page Cross-Media Semantic Intgeration (WP4) as a part of xLiMe Project (http://xlime.eu/) to collect, integrate, search and recommend different dimensions of media content (e.g. News, TV, Social Media etc.). 
+
 -------------------------
 Dependencies
 -------------------------

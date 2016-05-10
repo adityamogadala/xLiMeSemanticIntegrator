@@ -15,8 +15,6 @@ import sys
 sys.path.insert(0, '../utils')
 import rake
 class XlimeAdvancedRecommender:
-	def __init__(self, database):
-		self.mdb = database
 	def readConfig(self):
 		configdict={}
                 config = '../config/Config.conf'
@@ -31,8 +29,8 @@ class XlimeAdvancedRecommender:
                 if configdict['MongoDBPath']!="":
 			client = MongoClient(configdict['MongoDBPath'])
 			if configdict['MongoDBUserName']!="" and configdict['MongoDBPassword']!="":
-                                client.the_database.authenticate(configdict['MongoDBUserName'],configdict['MongoDBPassword'],source=self.mdb)
-				storedb = client[self.mdb]
+                                client.the_database.authenticate(configdict['MongoDBUserName'],configdict['MongoDBPassword'],source=configdict['MongoDBStorage'])
+				storedb = client[configdict['MongoDBStorage']]
 				collection = storedb[configdict['KafkaTopicASR']]
 				collection1 = storedb[configdict['KafkaTopicSocialMedia']]
 				collection2 = storedb[configdict['KafkaTopicNews']]

@@ -14,19 +14,10 @@ import glob
 from pymongo import MongoClient
 import pymongo
 class PushToMongoSubtitles:
-	def __init__(self, path,mongo,topics):
+	def __init__(self, path,configdic,topics):
 		self.path_to_dir = path
+		self.configdict = configdic
 		self.topic = topics
-		self.mdb = mongo
-	def readConfig(self):
-		configdict={}
-                config = '../config/Config.conf'
-                with open(config) as config_file:
-                        for lines in config_file:
-				if re.search(r'=',lines):
-                                	key = lines.strip('\n').split('=')
-                                	configdict[key[0]]=key[1]
-		return configdict
 	def GenerateZattooSub(self,jsonfile):
 		jsonList = []
 		newjsondict = {}
@@ -88,16 +79,15 @@ class PushToMongoSubtitles:
 				return jsonList
 	def MongoData(self):
 		files_in_dir = os.listdir(self.path_to_dir)
-		configdict=self.readConfig()
-                if configdict['MongoDBPath']!="":
-			client = MongoClient(configdict['MongoDBPath'])
-			if configdict['MongoDBUserName']!="" and configdict['MongoDBPassword']!="":
-                                client.the_database.authenticate(configdict['MongoDBUserName'],configdict['MongoDBPassword'],source=self.mdb)
-                		db = client[self.mdb]
+                if self.configdict['MongoDBPath']!="":
+			client = MongoClient(self.configdict['MongoDBPath'])
+			if self.configdict['MongoDBUserName']!="" and self.configdict['MongoDBPassword']!="":
+                                client.the_database.authenticate(self.configdict['MongoDBUserName'],self.configdict['MongoDBPassword'],source=self.configdict['MongoDBStorage'])
+                		db = client[self.configdict['MongoDBStorage']]
 				for file_in_dir in files_in_dir:
-						if self.topic == configdict["KafkaTopicSubtitles"]:
+						if self.topic == self.configdict["KafkaTopicSubtitles"]:
 							jsonStrings = self.GenerateZattooSub(file_in_dir)
-							mongocoll = str(configdict["KafkaTopicSubtitles"])
+							mongocoll = str(self.configdict["KafkaTopicSubtitles"])
 							bulk = db.mongocoll
 							if jsonStrings!=None:
 								for values in jsonStrings:

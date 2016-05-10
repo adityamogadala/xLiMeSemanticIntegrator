@@ -17,19 +17,10 @@ import pymongo
 import arrow
 import time
 class PushToMongoSpeech:
-	def __init__(self, path, topics,mongo):
+	def __init__(self,path,configdic,topics):
 		self.path_to_dir = path
+		self.configdict = configdic
 		self.topic = topics
-		self.mdb = mongo
-	def readConfig(self):
-		configdict={}
-                config = '../config/Config.conf'
-                with open(config) as config_file:
-                        for lines in config_file:
-				if re.search(r'=',lines):
-                                	key = lines.strip('\n').split('=')
-                                	configdict[key[0]]=key[1]
-		return configdict
 	def GenerateZattooAsr(self,jsonfile):
 		jsonList = []
 		newjsondict = {}
@@ -112,17 +103,16 @@ class PushToMongoSpeech:
 				return jsonList
 	def MongoData(self):
 		files_in_dir = os.listdir(self.path_to_dir)
-		configdict=self.readConfig()
-                if configdict['MongoDBPath']!="":
-			client = MongoClient(configdict['MongoDBPath'])
-                        if configdict['MongoDBUserName']!="" and configdict['MongoDBPassword']!="":
-                                client.the_database.authenticate(configdict['MongoDBUserName'],configdict['MongoDBPassword'],source=self.mdb)
-                		db = client[self.mdb]
+                if self.configdict['MongoDBPath']!="":
+			client = MongoClient(self.configdict['MongoDBPath'])
+                        if self.configdict['MongoDBUserName']!="" and self.configdict['MongoDBPassword']!="":
+                                client.the_database.authenticate(self.configdict['MongoDBUserName'],self.configdict['MongoDBPassword'],source=self.configdict['MongoDBStorage'])
+                		db = client[self.configdict['MongoDBStorage']]
 				storelist=[]
 				for file_in_dir in files_in_dir:
-						if self.topic == configdict['KafkaTopicASR']:
+						if self.topic == self.configdict['KafkaTopicASR']:
 							jsonStrings = self.GenerateZattooAsr(file_in_dir)
-							mongocoll = str(configdict['KafkaTopicASR'])
+							mongocoll = str(self.configdict['KafkaTopicASR'])
 							bulk = db.mongocoll
 							if jsonStrings!=None:
 								for values in jsonStrings:

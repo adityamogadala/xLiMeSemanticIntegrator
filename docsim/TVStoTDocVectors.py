@@ -15,17 +15,8 @@ import cPickle as pickle
 import shutil
 import re
 class SpeechtoTextVectors:
-        def __init__(self,database):
-                self.mdb = database
-	def readConfig(self):
-		configdict={}
-                config = '../config/Config.conf'
-                with open(config) as config_file:
-                        for lines in config_file:
-				if re.search(r'=',lines):
-                                	key = lines.strip('\n').split('=')
-                                	configdict[key[0]]=key[1]
-		return configdict
+        def __init__(self,configdic):
+		self.configdict = configdic
 	def createpklfiles(self,lang0,lang,corpus_ids,rows,word_features,X):
 		s = shelve.open('./StoreWordVec/wiki/'+lang0+'_'+lang+'_vec_wiki_shelf.db')
 		with open("docbivec_"+lang0+".txt","w") as f:
@@ -97,13 +88,12 @@ class SpeechtoTextVectors:
 				f.write(row+"\n")
 		shutil.copy2("ids_es.txt","./stotdocvecpkl/ids_es.copy")
         def computevectors(self):
-		configdict=self.readConfig()
-                if configdict['MongoDBPath']!="":
-			client = MongoClient(configdict['MongoDBPath'])
-			if configdict['MongoDBUserName']!="" and configdict['MongoDBPassword']!="":
-                                client.the_database.authenticate(configdict['MongoDBUserName'],configdict['MongoDBPassword'],source=self.mdb)
-                		storedb = client[self.mdb]
-                		collection = storedb[conficdict['KafkaTopicASR']]
+                if self.configdict['MongoDBPath']!="":
+			client = MongoClient(self.configdict['MongoDBPath'])
+			if self.configdict['MongoDBUserName']!="" and self.configdict['MongoDBPassword']!="":
+                                client.the_database.authenticate(self.configdict['MongoDBUserName'],self.configdict['MongoDBPassword'],source=self.configdict['MongoDBStorage'])
+                		storedb = client[self.configdict['MongoDBStorage']]
+                		collection = storedb[self.configdict['KafkaTopicASR']]
                 		corpus_en,corpus_de,corpus_it,corpus_es=[],[],[],[]
                 		corpus_en_id,corpus_de_id,corpus_it_id,corpus_es_id=[],[],[],[]
 				################## START - Collects Data from MongoDB (Sequential)################
@@ -153,10 +143,3 @@ class SpeechtoTextVectors:
 				print 'Please Set MongoDB UserName Password in Config file.'
 		else:
 			 print "Please Set MongoDB path in Config file."
-		
-def main():
-        database = "VicoStore"
-        testmongo = SpeechtoTextVectors(database)
-        testmongo.computevectors()
-if __name__ == "__main__":
-        main()

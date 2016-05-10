@@ -16,38 +16,37 @@ import SubtitlesProcessing
 import AdvancedSpeechKafkaProcessing
 from threading import Thread
 class AutomatePushToMongo:
-	def __init__(self,path,mongo,confdict):
+	def __init__(self,path,confdic):
 		self.path = path
-		self.mongo = mongo
-		self.confdicts = confdict
+		self.configdict = confdic
 	def continous_java_run(self,topic):
 		tot = "java -cp ../utils/kafkaextractor.jar:. aifb.kit.xlime.kafkaextracor.RunExtractor "+topic+" MyConsumer"
 		vals = commands.getoutput(tot)
 		time.sleep(2)
 	def continous_mongo_socialmedia(self):
-		topic=self.confdicts['KafkaTopicSocialMedia']
+		topic=self.configdict['KafkaTopicSocialMedia']
 		path1=self.path+topic+"/"
-	        sm = VicoSocialMediaStream.SocialMediaToMongo(path1,self.mongo,topic)
+	        sm = VicoSocialMediaStream.SocialMediaToMongo(path1,self.configdict,topic)
         	sm.MongoData()
 	def continous_mongo_zattoosub(self):
-		topic=self.confdicts['KafkaTopicSubtitles']
+		topic=self.configdict['KafkaTopicSubtitles']
 		path1=self.path+topic+"/"
-	        sm = SubtitlesProcessing.PushToMongoSubtitles(path1,self.mongo,topic)
+	        sm = SubtitlesProcessing.PushToMongoSubtitles(path1,self.configdict,topic)
         	sm.MongoData()
 	def continous_mongo_zattooepg(self):
-		topic=self.confdicts['KafkaTopicTVMetadata']
+		topic=self.configdict['KafkaTopicTVMetadata']
 		path1=self.path+topic+"/"
-	        metadata = ZattooTvMetadata.ZattooToMongo(path1,self.mongo,topic)
+	        metadata = ZattooTvMetadata.ZattooToMongo(path1,self.configdict,topic)
         	metadata.MongoData()
 	def continous_mongo_zattooasr(self):
-		topic=self.confdicts['KafkaTopicASR']
+		topic=self.configdict['KafkaTopicASR']
 		path1=self.path+topic+"/"
-	        asrdata = AdvancedSpeechKafkaProcessing.PushToMongoSpeech(path1,self.mongo,topic)
+	        asrdata = AdvancedSpeechKafkaProcessing.PushToMongoSpeech(path1,self.configdict,topic)
         	asrdata.MongoData()
 	def continous_mongo_news(self):
-		topic=self.confdicts['KafkaTopicNews']
+		topic=self.configdict['KafkaTopicNews']
 		path1=self.path+topic+"/"
-	        news = JsiNewsStream.Producer(path1,self.mongo,topic)
+	        news = JsiNewsStream.Producer(path1,self.configdict,topic)
         	news.run()
 ##### Add more here to support different types of data #######################
 		 
@@ -60,8 +59,7 @@ def main():
 			if re.search(r'=',lines):
 				key = lines.strip('\n').strip().split('=')
 				configdict[key[0]]=key[1]
-        mongostore = configdict['MongoDBStorage']
-	generatedata = AutomatePushToMongo(path,mongostore,configdict)
+	generatedata = AutomatePushToMongo(path,configdict)
 	try:
    		t1 = Thread(target=generatedata.continous_java_run, args=(confdict['KafkaTopicSocialMedia'],))
 		t1.start()

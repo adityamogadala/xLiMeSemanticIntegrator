@@ -13,6 +13,7 @@ import sys
 import glob
 from pymongo import MongoClient
 import pymongo
+import arrow
 class PushToMongoSubtitles:
 	def __init__(self, path,configdic,topics):
 		self.path_to_dir = path
@@ -94,6 +95,10 @@ class PushToMongoSubtitles:
 									if 'SourceURL' in values and 'SubtitlesToText' in values:
 										zattooid = values["SourceURL"].split("/")[-1].strip()
 										if int(zattooid) > 0:
+											start = 1000*int(arrow.get(values["StartTime"].strip()).datetime.strftime("%s"))
+											end = start + 40000
+											watch_url = "http://zattoo.com/watch/"+values["CID"].strip()+"/"+str(zattooid)+"/"+str(start)+"/"+str(end)
+                                                                                        values['ZattooURL'] = watch_url
 											try:
 												bulk.insert(values,continue_on_error=True)
 											except pymongo.errors.DuplicateKeyError:

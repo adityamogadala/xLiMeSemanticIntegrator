@@ -94,7 +94,7 @@ class CompareDocContent:
 			text2_vec = self.getvector(text2,s_lang2)
 			s_lang2.close()
 		else:
-			print 'Currently, this combination is not supported. Only between and other EU languages (de,es,it).'
+			print 'Currently, this combination is not supported. Only between EN and other EU languages (de,es,it).'
 			sys.exit(1)
 		d = distance.cdist(np.array([text1_vec]),np.array([text2_vec]), 'cosine')
 		return 1.0-d[0][0]

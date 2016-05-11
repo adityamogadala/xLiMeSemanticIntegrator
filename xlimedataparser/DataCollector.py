@@ -15,12 +15,14 @@ import JsiNewsStream
 import SubtitlesProcessing
 import AdvancedSpeechKafkaProcessing
 from threading import Thread
+from os.path import expanduser
 class AutomatePushToMongo:
 	def __init__(self,path,confdic):
 		self.path = path
 		self.configdict = confdic
 	def continous_java_run(self,topic):
-		tot = "java -cp ../utils/kafkaextractor.jar:. aifb.kit.xlime.kafkaextracor.RunExtractor "+topic+" MyConsumer"
+		tot = "java -cp ../utils/kafkaextractor_smallest.jar:. aifb.kit.xlime.kafkaextracor.RunExtractor "+topic+" "+self.configdict['KafkaConsumerGroupID']+" "+self.configdict['KafkaZookeeperPath']   # For using smallest offset of Kafka
+		#tot = "java -cp ../utils/kafkaextractor_largest.jar:. aifb.kit.xlime.kafkaextracor.RunExtractor "+topic+" "+self.configdict['KafkaConsumerGroupID']+" "+self.configdict['KafkaZookeeperPath']   # For using largest offset of Kafka
 		vals = commands.getoutput(tot)
 		time.sleep(2)
 	def continous_mongo_socialmedia(self):
@@ -51,7 +53,8 @@ class AutomatePushToMongo:
 ##### Add more here to support different types of data #######################
 		 
 def main():
-        path = '../storedata/'
+	home = expanduser("~")
+        path = home+'/storedata/'
 	configdict={}
 	config = '../config/Config.conf'
 	with open(config) as config_file:

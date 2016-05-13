@@ -20,31 +20,21 @@ import json
 import time
 import random
 class TestMongoSize:
-	def __init__(self,database,clientaddress,port):
-		self.db = database
-		self.address = clientaddress
-		self.port = port
-	def readConfig(self):
-		configdict={}
-                config = '../config/Config.conf'
-                with open(config) as config_file:
-                        for lines in config_file:
-                                if re.search(r'=',lines):
-                                        key = lines.strip('\n').split('=')
-                                        configdict[key[0]]=key[1]
-                return configdict
+	def __init__(self,configdic,path):
+		self.configdict = configdic
+		self.path = path
 	def CompareNewsToZattoo(self,collection2,final_vector,lang1,language):
 		reclist = []
 		if (lang1=="de"):
 			try:
 				if (language=="de"):
-					with open('./picklefiles/docbivec_'+language+'_en.pkl', 'rb') as infile:
+					with open(self.path+'docsim/stotdocvecpkl/docbivec_'+language+'_en.pkl', 'rb') as infile:
 						matrix= pickle.load(infile)
-					matrix1 = np.genfromtxt('./picklefiles/ids_de.copy',dtype='str')
+					matrix1 = np.genfromtxt(self.path+'docsim/stotdocvecpkl/ids_de.copy',dtype='str')
 				elif (language=="en"):
-					with open('./picklefiles/docbivec_'+language+'_de.pkl', 'rb') as infile:
+					with open(self.path+'docsim/stotdocvecpkl/docbivec_'+language+'_de.pkl', 'rb') as infile:
 						matrix= pickle.load(infile)
-                                        matrix1 = np.genfromtxt('./picklefiles/ids_en.copy',dtype='str')
+                                        matrix1 = np.genfromtxt(self.path+'docsim/stotdocvecpkl/ids_en.copy',dtype='str')
 				zattoo_list = self.ZattooList(final_vector,matrix,matrix1,collection2,"stot")
 				for values in zattoo_list:
 					reclist.append(values)
@@ -53,21 +43,21 @@ class TestMongoSize:
 		elif (lang1=="en"):
 			try:
 	                        if (language=="en"):
-					with open('./picklefiles/docbivec_'+language+'_de.pkl', 'rb') as infile:
+					with open(self.path+'docsim/stotdocvecpkl/docbivec_'+language+'_de.pkl', 'rb') as infile:
 						matrix= pickle.load(infile)
-                                        matrix1 = np.genfromtxt('./picklefiles/ids_en.copy',dtype='str')
+                                        matrix1 = np.genfromtxt(self.path+'docsim/stotdocvecpkl/ids_en.copy',dtype='str')
 				elif (language=="de"):
-					with open('./picklefiles/docbivec_'+language+'_en.pkl', 'rb') as infile:
+					with open(self.path+'docsim/stotdocvecpkl/docbivec_'+language+'_en.pkl', 'rb') as infile:
 						matrix= pickle.load(infile)
-					matrix1 = np.genfromtxt('./picklefiles/ids_de.copy',dtype='str')
+					matrix1 = np.genfromtxt(self.path+'docsim/stotdocvecpkl/ids_de.copy',dtype='str')
 				elif (language=="it"):
-					with open('./picklefiles/docbivec_'+language+'_en.pkl', 'rb') as infile:
+					with open(self.path+'docsim/stotdocvecpkl/docbivec_'+language+'_en.pkl', 'rb') as infile:
 						matrix= pickle.load(infile)
-                                        matrix1 = np.genfromtxt('./picklefiles/ids_it.copy',dtype='str')
+                                        matrix1 = np.genfromtxt(self.path+'docsim/stotdocvecpkl/ids_it.copy',dtype='str')
 				elif (language=="es"):
-					with open('./picklefiles/docbivec_'+language+'_en.pkl', 'rb') as infile:
+					with open(self.path+'docsim/stotdocvecpkl/docbivec_'+language+'_en.pkl', 'rb') as infile:
 						matrix= pickle.load(infile)
-                                    	matrix1 = np.genfromtxt('./picklefiles/ids_es.copy',dtype='str')
+                                    	matrix1 = np.genfromtxt(self.path+'docsim/stotdocvecpkl/ids_es.copy',dtype='str')
 				zattoo_list = self.ZattooList(final_vector,matrix,matrix1,collection2,"stot")
 				for values in zattoo_list:
 					reclist.append(values)
@@ -79,13 +69,13 @@ class TestMongoSize:
 		if (lang1=="de"):
 			try:
 				if (language=="de"):
-					with open('./subtitlepicklefiles/docbivec_'+language+'_en.pkl', 'rb') as infile:
+					with open(self.path+'docsim/subtitledocvecpkl/docbivec_'+language+'_en.pkl', 'rb') as infile:
 						matrix= pickle.load(infile)
-					matrix1 = np.genfromtxt('./subtitlepicklefiles/ids_de.copy',dtype='str')
+					matrix1 = np.genfromtxt(self.path+'docsim/subtitledocvecpkl/ids_de.copy',dtype='str')
 				elif (language=="en"):
-					with open('./subtitlepicklefiles/docbivec_'+language+'_de.pkl', 'rb') as infile:
+					with open(self.path+'docsim/subtitledocvecpkl/docbivec_'+language+'_de.pkl', 'rb') as infile:
 						matrix= pickle.load(infile)
-                                        matrix1 = np.genfromtxt('./subtitlepicklefiles/ids_en.copy',dtype='str')
+                                        matrix1 = np.genfromtxt(self.path+'docsim/subtitledocvecpkl/ids_en.copy',dtype='str')
 				zattoo_list = self.ZattooList(final_vector,matrix,matrix1,collection2,"sub")
 				for values in zattoo_list:
 					reclist.append(values)
@@ -94,21 +84,21 @@ class TestMongoSize:
 		elif (lang1=="en"):
 			try:
 	                        if (language=="en"):
-					with open('./subtitlepicklefiles/docbivec_'+language+'_de.pkl', 'rb') as infile:
+					with open(self.path+'docsim/subtitledocvecpkl/docbivec_'+language+'_de.pkl', 'rb') as infile:
 						matrix= pickle.load(infile)
-                                        matrix1 = np.genfromtxt('./subtitlepicklefiles/ids_en.copy',dtype='str')
+                                        matrix1 = np.genfromtxt(self.path+'docsim/subtitledocvecpkl/ids_en.copy',dtype='str')
 				elif (language=="de"):
-					with open('./subtitlepicklefiles/docbivec_'+language+'_en.pkl', 'rb') as infile:
+					with open(self.path+'docsim/subtitledocvecpkl/docbivec_'+language+'_en.pkl', 'rb') as infile:
 						matrix= pickle.load(infile)
-					matrix1 = np.genfromtxt('./subtitlepicklefiles/ids_de.copy',dtype='str')
+					matrix1 = np.genfromtxt(self.path+'docsim/subtitledocvecpkl/ids_de.copy',dtype='str')
 				elif (language=="it"):
-					with open('./subtitlepicklefiles/docbivec_'+language+'_en.pkl', 'rb') as infile:
+					with open(self.path+'docsim/subtitledocvecpkl/docbivec_'+language+'_en.pkl', 'rb') as infile:
 						matrix= pickle.load(infile)
-                                        matrix1 = np.genfromtxt('./subtitlepicklefiles/ids_it.copy',dtype='str')
+                                        matrix1 = np.genfromtxt(self.path+'docsim/subtitledocvecpkl/ids_it.copy',dtype='str')
 				elif (language=="es"):
-					with open('./subtitlepicklefiles/docbivec_'+language+'_en.pkl', 'rb') as infile:
+					with open(self.path+'docsim/subtitledocvecpkl/docbivec_'+language+'_en.pkl', 'rb') as infile:
 						matrix= pickle.load(infile)
-                                    	matrix1 = np.genfromtxt('./subtitlepicklefiles/ids_es.copy',dtype='str')
+                                    	matrix1 = np.genfromtxt(self.path+'docsim/subtitledocvecpkl/ids_es.copy',dtype='str')
 				zattoo_list = self.ZattooList(final_vector,matrix,matrix1,collection2,"sub")
 				for values in zattoo_list:
 					reclist.append(values)
@@ -136,20 +126,14 @@ class TestMongoSize:
 				appendlist.append(zattoo_dict)
 		return appendlist
 	def pushrec(self,p,collection2,collection3,bulk):
-			recommends_en=[]
-			recommends_de=[]
-			recommends_es=[]
-			recommends_it=[]
-			recommends_en_sub=[]
-			recommends_de_sub=[]
-			recommends_es_sub=[]
-			recommends_it_sub=[]
+			recommends_en,recommends_de,recommends_es,recommends_it=[],[],[],[]
+			recommends_en_sub,recommends_de_sub,recommends_es_sub,recommends_it_sub=[],[],[],[]
 			dict_news_tv = {}
 			doc_vector=np.array([0.0]*100)
 			final_vector=np.array([0.0]*100)
 			if p['Lang']=="de":
 				tokens = utils.simple_preprocess(p['Text'].encode('utf-8', 'replace'))
-				s = shelve.open('../StoreWordVec/wiki/de_en_vec_wiki_shelf.db')
+				s = shelve.open(self.path+'StoreWordVec/wiki/de_en_vec_wiki_shelf.db')
 				final_vec = self.docvectors(s,tokens,doc_vector,final_vector)
 				s.close()
 				recommends_en = self.CompareNewsToZattoo(collection2,final_vec,p['Lang'],"en")
@@ -158,19 +142,19 @@ class TestMongoSize:
 				recommends_de_sub = self.CompareNewsToZattoo_sub(collection3,final_vec,p['Lang'],"de")
 			elif p['Lang']=="en":
 				tokens = utils.simple_preprocess(p['Text'])
-				s = shelve.open('../StoreWordVec/wiki/en_de_vec_wiki_shelf.db')
+				s = shelve.open(self.path+'StoreWordVec/wiki/en_de_vec_wiki_shelf.db')
 				final_vec = self.docvectors(s,tokens,doc_vector,final_vector)
 				s.close()
 				recommends_en = self.CompareNewsToZattoo(collection2,final_vec,p['Lang'],"en")
 				recommends_de = self.CompareNewsToZattoo(collection2,final_vec,p['Lang'],"de")
 				recommends_en_sub = self.CompareNewsToZattoo_sub(collection3,final_vec,p['Lang'],"en")
 				recommends_de_sub = self.CompareNewsToZattoo_sub(collection3,final_vec,p['Lang'],"de")
-				s = shelve.open('../StoreWordVec/wiki/en_es_vec_wiki_shelf.db')
+				s = shelve.open(self.path+'StoreWordVec/wiki/en_es_vec_wiki_shelf.db')
 				final_vec = self.docvectors(s,tokens,doc_vector,final_vector)
 				s.close()
 				recommends_es = self.CompareNewsToZattoo(collection2,final_vec,p['Lang'],"es")
 				recommends_es_sub = self.CompareNewsToZattoo(collection3,final_vec,p['Lang'],"es")
-				s = shelve.open('../StoreWordVec/wiki/en_it_vec_wiki_shelf.db')
+				s = shelve.open(self.path+'StoreWordVec/wiki/en_it_vec_wiki_shelf.db')
 				final_vec = self.docvectors(s,tokens,doc_vector,final_vector)
 				s.close()
 				recommends_it = self.CompareNewsToZattoo(collection2,final_vec,p['Lang'],"it")
@@ -204,16 +188,15 @@ class TestMongoSize:
 				bulk.insert(json.loads(json.dumps(dict_news_tv)),continue_on_error=True)
 			except pymongo.errors.DuplicateKeyError:
 				pass
-	def calcsize(self):
-		configdict=self.readConfig()
-                if configdict['MongoDBPath']!="":
-			client = MongoClient(configdict['MongoDBPath'])
-			if configdict['MongoDBUserName']!="" and configdict['MongoDBPassword']!="":
-                                client.the_database.authenticate(configdict['MongoDBUserName'],configdict['MongoDBPassword'],source=self.mdb)
-				storedb = client[self.db]
-				collection5 = storedb["tailablequeryzattoo"]
-				collection2 = storedb["zattooasr"]
-				collection3 = storedb["zattoosub"]
+	def reccrosschannel(self):
+                if self.configdict['MongoDBPath']!="":
+			client = MongoClient(self.configdict['MongoDBPath'])
+			if self.configdict['MongoDBUserName']!="" and self.configdict['MongoDBPassword']!="":
+                                client.the_database.authenticate(self.configdict['MongoDBUserName'],self.configdict['MongoDBPassword'],source=self.configdict['MongoDBStorage'])
+				storedb = client[self.configdict['MongoDBStorage']]
+				collection5 = storedb["tailablequery"]
+				collection2 = storedb[self.configdict['KafkaTopicASR']]
+				collection3 = storedb[self.configdict['KafkaTopicSubtitles']]
 				bulk = storedb.returnzattoorec
 				#collection5.insert({"Lang":"de", "Text":"test"}) test document
 				cursor = collection5.find(tailable=True,await_data=True)
@@ -240,11 +223,19 @@ class TestMongoSize:
 		else:
 			final_vector = doc_vector
 		return final_vector
+def readconfig():
+        configdict={}
+        config = '../config/Config.conf'
+        with open(config) as config_file:
+                for lines in config_file:
+                        if re.search(r'=',lines):
+                                key = lines.strip('\n').strip().split('=')
+                                configdict[key[0]]=key[1]
+        return configdict
 def main():
-	database = "VicoStore"
-	clientaddress = "aifb-ls3-merope.aifb.kit.edu"
-	port=27017
-	testmongo=TestMongoSize(database,clientaddress,port)
-	testmongo.calcsize()
+	configdic = readconfig()
+	path = '/'+'/'.join(os.getcwd().split('/')[1:-1])+'/'
+	testmongo=TestMongoSize(configdic,path)
+	testmongo.reccrosschannel()
 if __name__ == "__main__":
 	main()

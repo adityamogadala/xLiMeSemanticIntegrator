@@ -23,7 +23,7 @@ Code is Written in Python 2.7+ and Java. Also, it depends on.
 3.  Download Word Embeddings ([Monolingual and Bilingual](http://people.aifb.kit.edu/amo/wordembeddings/)) zip files. Extract and keep them in StoreWordVec/wiki for Wikipedia, StoreWordVec/news for News etc..
 4.  Get [MongoDB](https://www.mongodb.com/) and run the following. 
 	* `$cd MongoDBfolder`
-        * `$mkdir /data/db/` (Create local directory on disk for MongoDB database)
+	* `$mkdir /data/db/` (Create local directory on disk for MongoDB database)
 	* `$./mongo` 
 	* `$use MyStore` (Creates a MongoDB database "MyStore"). 
 	* `$db.addUser("username","password") `  (Creates Username and Password for the database to secure it).

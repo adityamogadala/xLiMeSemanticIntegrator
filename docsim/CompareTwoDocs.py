@@ -15,7 +15,7 @@ import langid
 
 class CompareDocContent:
 	def __init__(self):
-		self.wordvecdir='./StoreWordVec/wiki/'
+		self.wordvecdir='../StoreWordVec/wiki/'
 	def detectlang(self,text):
 	#	langid.set_languages(['en','de','es','it'])
 		return langid.classify(text)[0]

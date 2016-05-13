@@ -40,15 +40,14 @@ Code is Written in Python 2.7+ and Java. Also, it depends on.
 	* `> exit`
 	* `$mongo -u username -p password --authenticationDatabase admin`
 	* `> use MyStore` (Create Your own Database which will be used in Config file)
-	* `> db.createUser({user:"username",pwd:"password",roles: [{role:"userAdmin",db: "MyStore"}]}) ` (Create Username and Password for the database).
+	* `> db.createUser({user:"username",pwd:"password",roles: [{role:"dbOwner",db: "MyStore"}]}) ` (Create Username and Password for the database).
 	* `> exit`
 * Update config/Config.conf as suggested in the file.
 * `$python setup.py`
 * Start service/collector.sh to collect data from the Kafka stream. 
 	* `$ nohup sh collector.sh &`
 * Test if your MongoDB database collections exist and create text indexes for them.
-	* `$cd MongoDBfolder/bin`
-	* `$./mongo`
+	* `$mongo`
 	* `> use MyStore`
 	* `> db.auth("username","password")`
 	* `> show collections`

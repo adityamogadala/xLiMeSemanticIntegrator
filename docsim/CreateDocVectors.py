@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#-*- coding: utf-8 -*-
 #==============================================================================
 #Description     : Create vectors for SpeechtoText, Subtitles etc..
 #Author          : Aditya Mogadala 

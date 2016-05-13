@@ -34,7 +34,7 @@ Code is Written in Python 2.7+ and Java. Also, it depends on.
 ##  Get Started
 
 * Start MongoDB deamon with authentication.
-	* `$sudo ./mongod --dbpath ../../data/db --fork --logpath mongodb.log --auth`
+	* `$sudo ./mongod --dbpath ../data/db --fork --logpath mongodb.log --auth`
 * Update config/Config.conf as suggested in the file.
 * `$python setup.py`
 * Start service/collector.sh to collect data from the Kafka stream. 

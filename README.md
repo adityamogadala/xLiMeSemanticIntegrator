@@ -36,7 +36,7 @@ Code is Written in Python 2.7+ and Java. Also, it depends on.
 	* `$sudo mongod --fork --logpath mongodb.log --auth`
 	* `$mongo` 
 	* `> use admin`. 
-	* `> db.createUser({user:"username",pwd:"password",roles: [{role:"userAdminAnyDatabase",db: "admin"}]}) ` (Create Username and Password for the database).
+	* `> db.createUser({user:"username",pwd:"password",roles: [{role:"userAdminAnyDatabase",db: "admin"}]}) ` (Create super user and password for the "admin" database).
 	* `> exit`
 	* `$mongo -u username -p password --authenticationDatabase admin`
 	* `> use MyStore` (Create Your own Database which will be used in Config file)

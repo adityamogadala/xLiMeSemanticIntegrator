@@ -48,4 +48,6 @@ Code is Written in Python 2.7+ and Java. Also, it depends on.
 	* `> db.YOUR_COLLECTION_NAME.ensureIndex( {Text: "text", Title: "text"}, {dropDups: true} )`
 	* `> db.SUBTITLES_COLLECTION.ensureIndex( {Text: "text"}, {dropDups: true} )` (No Titles info for Subtitles.)
 	* `> exit`
+* Start service/vecgenerator.sh to generate vectors for subtitles and speech to text data (yet to add for news and social media).
+	* `$ nohup sh vecgenerator.sh &`
 * Examples folder contains few examples on how to use different classes for tasks such as simple search, advanced search, monolingual and cross-lingual document similarity and analytics. You can use individual python files or ipython file (.ipynb) for execution.

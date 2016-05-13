@@ -19,16 +19,20 @@ Code is Written in Python 2.7+ and Java. Also, it depends on.
 
 1. `$git clone https://github.com/adityamogadala/xLiMeSemanticIntegrator.git`
 2. `$pip install -r requirements.txt`
+3. `$pip install kafka-python`
 3.  Download Word Embeddings ([Monolingual and Bilingual](http://people.aifb.kit.edu/amo/wordembeddings/)) zip files. Extract and keep them in StoreWordVec/wiki for Wikipedia, StoreWordVec/news for News etc..
 4.  Get [MongoDB](https://www.mongodb.com/) and run the following. 
 	* `$cd MongoDBfolder`
-	*  `$./mongo` 
-	*  `$use MyStore` (Creates a MongoDB database "MyStore"). 
-	*  `$ `  (Creates Username and Password for the database to secure it).
+        * `$mkdir /data/db/` (Create local directory on disk for MongoDB database)
+	* `$./mongo` 
+	* `$use MyStore` (Creates a MongoDB database "MyStore"). 
+	* `$db.addUser("username","password") `  (Creates Username and Password for the database to secure it).
 
 ##  Get Started
 
 * Update config/Config.conf as suggested in the file.
+* Start MongoDB deamon with authentication.
+	* `$./mongod --dbpath ../data/db --fork --logpath mongodb.log --auth`
 * Start service/collector.sh to collect data from the Kafka stream. 
 	* `$ nohup sh collector.sh &`
 * Examples folder contains few examples on how to use different classes for tasks such as simple search, advanced search, monolingual and cross-lingual document similarity and analytics. You can use individual python files or ipython file (.ipynb) for execution.

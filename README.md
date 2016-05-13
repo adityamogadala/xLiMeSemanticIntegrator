@@ -25,5 +25,6 @@ Code is Written in Python 2.7+ and Java. Also, it depends on.
 ##  Get Started
 
 * Update config/Config.conf as suggested in the file.
-* Start service/collector.sh with `$ nohup sh collector.sh &` to collect data from the Kafka stream.
+* Start service/collector.sh to collect data from the Kafka stream. 
+	`$ nohup sh collector.sh &`
 * Examples folder contains few examples on how to use different classes for tasks such as simple search, advanced search, monolingual and cross-lingual document similarity and analytics. You can use individual python files or ipython file (.ipynb) for execution.

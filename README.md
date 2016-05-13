@@ -47,9 +47,9 @@ Code is Written in Python 2.7+ and Java. Also, it depends on.
 * Start service/collector.sh to collect data from the Kafka stream. 
 	* `$ nohup sh collector.sh &`
 * Test if your MongoDB database collections exist and create text indexes for them.
-	* `$mongo`
+	* `$mongo -u username -p password --authenticationDatabase admin`
 	* `> use MyStore`
-	* `> db.auth("username","password")`
+	* `> db.auth("username","password")` ("MyStore" user authentication)
 	* `> show collections`
 	* `> db.YOUR_COLLECTION_NAME.ensureIndex( {Text: "text", Title: "text"}, {dropDups: true} )`
 	* `> db.SUBTITLES_COLLECTION.ensureIndex( {Text: "text"}, {dropDups: true} )` (No Titles info for Subtitles.)

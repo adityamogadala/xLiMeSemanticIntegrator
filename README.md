@@ -1,8 +1,4 @@
-##  Installation Instructions
-
-1. `git clone https://github.com/adityamogadala/xLiMeSemanticIntegrator.git`
-2. Download Word Embeddings ([Monolingual and Bilingual](http://people.aifb.kit.edu/amo/wordembeddings/))
-
+This readme provides information about dependencies, installation instructions and how to get started with the code.
 
 ## Dependencies
 
@@ -19,3 +15,9 @@ Code is Written in Python 2.7+ and Java. Also, it depends on.
 * [MongoDB](https://www.mongodb.com/)
 * [Apache Kafka](http://kafka.apache.org/)
 
+##  Installation Instructions
+
+1. `git clone https://github.com/adityamogadala/xLiMeSemanticIntegrator.git`
+2. Download Word Embeddings ([Monolingual and Bilingual](http://people.aifb.kit.edu/amo/wordembeddings/))
+
+##  Get Started

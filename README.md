@@ -21,15 +21,14 @@ Code is Written in Python 2.7+ and Java. Also, it depends on.
 2. `$pip install -r requirements.txt`
 3.  Download Word Embeddings ([Monolingual and Bilingual](http://people.aifb.kit.edu/amo/wordembeddings/)) zip files. Extract and keep them in StoreWordVec/wiki for Wikipedia, StoreWordVec/news for News etc..
 4.  Get [MongoDB](https://www.mongodb.com/) and run the following. 
-
-**  `$cd MongoDBfolder`
-**  `$./mongo` 
-**  `$use MyStore` (Creates a MongoDB database "MyStore"). 
-**  `$ `  (Creates Username and Password for the database to secure it).
+	* `$cd MongoDBfolder`
+	*  `$./mongo` 
+	*  `$use MyStore` (Creates a MongoDB database "MyStore"). 
+	*  `$ `  (Creates Username and Password for the database to secure it).
 
 ##  Get Started
 
 * Update config/Config.conf as suggested in the file.
 * Start service/collector.sh to collect data from the Kafka stream. 
-** `$ nohup sh collector.sh &`
+	* `$ nohup sh collector.sh &`
 * Examples folder contains few examples on how to use different classes for tasks such as simple search, advanced search, monolingual and cross-lingual document similarity and analytics. You can use individual python files or ipython file (.ipynb) for execution.

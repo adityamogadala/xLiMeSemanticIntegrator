@@ -8,14 +8,14 @@
 
 Code is Written in Python 2.7+ and Java. Also, it depends on.
 
-* Numpy
-* Scipy
-* sklearn
-* gensim 
-* LangID (https://github.com/saffsd/langid.py)
-* Rake (https://github.com/aneesha/RAKE)
-* Pymongo-2.8 (https://pypi.python.org/pypi/pymongo/2.8)
-* Kafka Python Client (https://github.com/dpkp/kafka-python)
-* MongoDB
-* Kafka
+* [Numpy](http://www.numpy.org/)
+* [Scipy](https://www.scipy.org/install.html)
+* [sklearn](http://kafka.apache.org/)
+* [gensim](https://radimrehurek.com/gensim/)
+* [LangID](https://github.com/saffsd/langid.py)
+* [Rake] (https://github.com/aneesha/RAKE)
+* [Pymongo-2.8] (https://pypi.python.org/pypi/pymongo/2.8)
+* [Kafka Python Client] (https://github.com/dpkp/kafka-python)
+* [MongoDB](https://www.mongodb.com/)
+* [Apache Kafka](http://kafka.apache.org/)
 

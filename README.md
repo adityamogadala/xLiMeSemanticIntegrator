@@ -24,9 +24,11 @@ Code is Written in Python 2.7+ and Java. Also, it depends on.
 6.  Get [MongoDB](https://www.mongodb.com/) and run the following. 
 	* `$cd MongoDBfolder`
 	* `$mkdir /data/db/` (Create local directory on disk for MongoDB database)
+	* `$cd bin`
 	* `$./mongo` 
-	* `$use MyStore` (Creates a MongoDB database "MyStore"). 
-	* `$db.addUser("username","password") `  (Creates Username and Password for the database to secure it).
+	* `> use MyStore` (Creates a MongoDB database "MyStore"). 
+	* `> db.addUser("username","password") `  (Creates Username and Password for the database to secure it).
+	* `> exit`
 
 ##  Get Started
 
@@ -36,4 +38,10 @@ Code is Written in Python 2.7+ and Java. Also, it depends on.
 * `$python setup.py`
 * Start service/collector.sh to collect data from the Kafka stream. 
 	* `$ nohup sh collector.sh &`
+* Test your MongoDB database if collections are created.
+	* `$cd MongoDBfolder/bin`
+	* `$./mongo`
+	* `> use MyStore`
+	* `> db.auth("username","password")`
+	* `> show collections`
 * Examples folder contains few examples on how to use different classes for tasks such as simple search, advanced search, monolingual and cross-lingual document similarity and analytics. You can use individual python files or ipython file (.ipynb) for execution.

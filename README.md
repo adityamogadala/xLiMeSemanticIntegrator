@@ -1,22 +1,21 @@
--------------------------
-Installation Instructions
--------------------------
+##  Installation Instructions
 
-1. Download Word Embeddings [Monolingual and Bilingual](http://people.aifb.kit.edu/amo/wordembeddings/)
+1. `git clone https://github.com/adityamogadala/xLiMeSemanticIntegrator.git`
+2. Download Word Embeddings ([Monolingual and Bilingual](http://people.aifb.kit.edu/amo/wordembeddings/))
 
--------------------------
-Dependencies
--------------------------
+
+## Dependencies
+
 Code is Written in Python 2.7+ and Java. Also, it depends on.
 
-1. Numpy
-2. Scipy
-3. sklearn
-4. gensim 
-5. LangID (https://github.com/saffsd/langid.py)
-6. Rake (https://github.com/aneesha/RAKE)
-7. Pymongo-2.8 (https://pypi.python.org/pypi/pymongo/2.8)
-8. Kafka Python Client (https://github.com/dpkp/kafka-python)
-9. MongoDB
-10. Kafka
+* Numpy
+* Scipy
+* sklearn
+* gensim 
+* LangID (https://github.com/saffsd/langid.py)
+* Rake (https://github.com/aneesha/RAKE)
+* Pymongo-2.8 (https://pypi.python.org/pypi/pymongo/2.8)
+* Kafka Python Client (https://github.com/dpkp/kafka-python)
+* MongoDB
+* Kafka
 

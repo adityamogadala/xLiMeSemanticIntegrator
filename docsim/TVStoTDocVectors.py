@@ -98,17 +98,17 @@ class SpeechtoTextVectors:
                 		corpus_en_id,corpus_de_id,corpus_it_id,corpus_es_id=[],[],[],[]
 				################## START - Collects Data from MongoDB (Sequential)################
                 		for p in collection.find():
-                             		if p["Lang"]=="en" and p["SpeechToText"]!="":
-                                        	corpus_en.append(p["SpeechToText"].strip().strip("\n").encode('utf-8', 'replace').decode("utf-8"))
+                             		if p["Lang"]=="en" and p["Text"]!="":
+                                        	corpus_en.append(p["Text"].strip().strip("\n").encode('utf-8', 'replace').decode("utf-8"))
 						corpus_en_id.append(str(p['_id']))
-                                	elif p["Lang"]=="de" and p["SpeechToText"]!="":
-                                        	corpus_de.append(p["SpeechToText"].strip().strip("\n").encode('utf-8', 'replace'))
+                                	elif p["Lang"]=="de" and p["Text"]!="":
+                                        	corpus_de.append(p["Text"].strip().strip("\n").encode('utf-8', 'replace'))
 						corpus_de_id.append(str(p['_id']))
-                                	elif p["Lang"]=="it" and p["SpeechToText"]!="":
-                                        	corpus_it.append(p["SpeechToText"].strip().strip("\n").encode('utf-8', 'replace'))
+                                	elif p["Lang"]=="it" and p["Text"]!="":
+                                        	corpus_it.append(p["Text"].strip().strip("\n").encode('utf-8', 'replace'))
 						corpus_it_id.append(str(p['_id']))
-                                	elif p["Lang"]=="es" and p["SpeechToText"]!="":
-                                        	corpus_es.append(p["SpeechToText"].strip().strip("\n").encode('utf-8', 'replace'))
+                                	elif p["Lang"]=="es" and p["Text"]!="":
+                                        	corpus_es.append(p["Text"].strip().strip("\n").encode('utf-8', 'replace'))
 						corpus_es_id.append(str(p['_id']))
 
 				################## END - Collects Data from MongoDB (Sequential)################

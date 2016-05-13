@@ -38,7 +38,7 @@ class PushToMongoSpeech:
 							jsonString['SourceURL']=zattoosource
 						if "xlime:hasASRText" in items:
 							speech = items["xlime:hasASRText"]
-							jsonString['SpeechToText']=speech
+							jsonString['Text']=speech
 						if "xlime:hasStartTime" in items:
                                                         stime = items["xlime:hasStartTime"]["@value"]
                                                         jsonString['StartTime']=stime
@@ -53,7 +53,7 @@ class PushToMongoSpeech:
                                                         jsonString['PDSource']=pds
                                                 if "xlime:hasPDTitle" in items:
                                                         pdstitle = items["xlime:hasPDTitle"]
-                                                        jsonString['PDTitle']=pdstitle
+                                                        jsonString['Title']=pdstitle
                                                 if "rdfs:label" in items:
                                                         lang = items["rdfs:label"]
 							if lang=="de" or lang=="it" or lang=="en" or lang=="es":
@@ -84,10 +84,10 @@ class PushToMongoSpeech:
                                         newjsondict['PDSource']=jsonList[0]['PDSource']
                                 else:
                                         newjsondict['PDSource']=""
-                                if 'PDTitle' in jsonList[0]:
-                                        newjsondict['PDTitle']=jsonList[0]['PDTitle'].encode('utf-8','replace').decode("utf-8")
+                                if 'Title' in jsonList[0]:
+                                        newjsondict['Title']=jsonList[0]['Title'].encode('utf-8','replace').decode("utf-8")
                                 else:
-                                        newjsondict['PDTitle']=""
+                                        newjsondict['Title']=""
                                 if 'Lang' in jsonList[0]:
                                         newjsondict['Lang']=jsonList[0]['Lang'].encode('utf-8','replace').decode("utf-8")
                                 else:
@@ -96,7 +96,7 @@ class PushToMongoSpeech:
                                         newjsondict['PDStartTime']=jsonList[0]['PDStartTime']
                                 else:
                                         newjsondict['PDStartTime']=""
-				newjsondict['SpeechToText']=jsonList[0]['SpeechToText'].encode('utf-8','replace').decode("utf-8")
+				newjsondict['Text']=jsonList[0]['Text'].encode('utf-8','replace').decode("utf-8")
 				newjsondict['SourceURL']=jsonList[1]['SourceURL']
 				jsonList=[]
 				jsonList.append(newjsondict)
@@ -116,7 +116,7 @@ class PushToMongoSpeech:
 							bulk = db.mongocoll
 							if jsonStrings!=None:
 								for values in jsonStrings:
-									if 'SourceURL' in values and 'SpeechToText' in values:
+									if 'SourceURL' in values and 'Text' in values:
 										zattooid = values["SourceURL"].split("/")[-1].strip()
 										if int(zattooid) > 0 :
 											start = 1000*int(arrow.get(values["StartTime"].strip()).datetime.strftime("%s"))

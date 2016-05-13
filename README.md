@@ -34,15 +34,18 @@ Code is Written in Python 2.7+ and Java. Also, it depends on.
 ##  Get Started
 
 * Start MongoDB deamon with authentication.
-	* `$./mongod --dbpath ../data/db --fork --logpath mongodb.log --auth`
+	* `$sudo ./mongod --dbpath ../../data/db --fork --logpath mongodb.log --auth`
 * Update config/Config.conf as suggested in the file.
 * `$python setup.py`
 * Start service/collector.sh to collect data from the Kafka stream. 
 	* `$ nohup sh collector.sh &`
-* Test your MongoDB database if collections are created.
+* Test your MongoDB database collections exist and create text indexes for them.
 	* `$cd MongoDBfolder/bin`
 	* `$./mongo`
 	* `> use MyStore`
 	* `> db.auth("username","password")`
 	* `> show collections`
+	* `> db.YOUR_COLLECTION_NAME.ensureIndex( {Text: "text", Title: "text"}, {dropDups: true} )`
+	* `> db.SUBTITLES_COLLECTION.ensureIndex( {Text: "text"}, {dropDups: true} )` (No Title information exists for Subtitles.)
+	* `> exit`
 * Examples folder contains few examples on how to use different classes for tasks such as simple search, advanced search, monolingual and cross-lingual document similarity and analytics. You can use individual python files or ipython file (.ipynb) for execution.

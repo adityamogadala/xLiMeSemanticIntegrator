@@ -36,7 +36,7 @@ class PushToMongoSubtitles:
 							jsonString['SourceURL']=zattoosource
 						if "xlime:hasSubittleText" in items:
 							speech = items["xlime:hasSubittleText"]
-							jsonString['SubtitlesToText']=" ".join(speech.replace("\n"," ").split())
+							jsonString['Text']=" ".join(speech.replace("\n"," ").split())
 						if "xlime:hasStartTime" in items:
                                                         stime = items["xlime:hasStartTime"]["@value"]
                                                         jsonString['StartTime']=stime
@@ -73,7 +73,7 @@ class PushToMongoSubtitles:
                                         newjsondict['Lang']=jsonList[0]['Lang'].encode('utf-8','replace').decode("utf-8")
                                 else:
                                         newjsondict['Lang']=""
-				newjsondict['SubtitlesToText']=jsonList[0]['SubtitlesToText'].encode('utf-8','replace').decode("utf-8")
+				newjsondict['Text']=jsonList[0]['Text'].encode('utf-8','replace').decode("utf-8")
 				newjsondict['SourceURL']=jsonList[1]['SourceURL']
 				jsonList=[]
 				jsonList.append(newjsondict)
@@ -92,7 +92,7 @@ class PushToMongoSubtitles:
 							bulk = db.mongocoll
 							if jsonStrings!=None:
 								for values in jsonStrings:
-									if 'SourceURL' in values and 'SubtitlesToText' in values:
+									if 'SourceURL' in values and 'Text' in values:
 										zattooid = values["SourceURL"].split("/")[-1].strip()
 										if int(zattooid) > 0:
 											start = 1000*int(arrow.get(values["StartTime"].strip()).datetime.strftime("%s"))

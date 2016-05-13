@@ -12,7 +12,7 @@ class CountMongo:
 				storedb = client[self.configdict['MongoDBStorage']]
 				collection,collection1,collection2,collection3,collection4 = storedb[self.configdict['KafkaTopicTVMetadata']], storedb[self.configdict["KafkaTopicSocialMedia"]],storedb[self.configdict['KafkaTopicNews']],storedb[self.configdict['KafkaTopicASR']],storedb[self.configdict['KafkaTopicSubtitles']]
 	
-		print "Total Docs in Collection [tvmetadata], [socialmedia],[jsinewsfeed],[zattooasr],[ZattooSubTitles]:: ", collection.find().count(), collection1.find().count(), collection2.find().count(), collection3.find().count(),collection4.find().count()
+		print "Total Docs in Collection [TV Metadata], [Social Media],[News],[TV ASR],[TV SubTitles]::", collection.find().count(), collection1.find().count(), collection2.find().count(), collection3.find().count(),collection4.find().count()
 		
 def main():
 	configdict={}

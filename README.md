@@ -16,25 +16,32 @@ Code is Written in Python 2.7+ and Java. Also, it depends on.
 * [MongoDB](https://www.mongodb.com/)
 * [Apache Kafka](http://kafka.apache.org/)
 
-##  Installation Instructions
+##  Installation Instructions (Debian/Ubuntu)
 
 1. `$git clone https://github.com/adityamogadala/xLiMeSemanticIntegrator.git`
-2. `$pip install -r requirements.txt`
-3. `$pip install kafka-python`
+2.  Make sure you have python-dev and setuptools. Otherwise install
+	* `sudo apt-get install python-dev`
+	* `sudo pip install --upgrade setuptools`
+3. BLAS/LAPACK are required for scipy and numpy. If not already present, install.
+	* `sudo apt-get install libblas-dev liblapack-dev`
+2. `$sudo pip install -r requirements.txt`
+3. `$sudo pip install kafka-python`
 5.  Download Word Embeddings ([Monolingual and Bilingual](http://people.aifb.kit.edu/amo/wordembeddings/)) zip files. Extract and keep them in StoreWordVec/wiki for Wikipedia, StoreWordVec/news for News etc..
-6.  Get [MongoDB](https://www.mongodb.com/) and run the following. 
-	* `$cd MongoDBfolder`
-	* `$mkdir /data/db/` (Create local directory on disk for MongoDB database)
-	* `$cd bin`
-	* `$./mongo` 
-	* `> use MyStore` (Creates a MongoDB database "MyStore"). 
-	* `> db.addUser("username","password") `  (Creates Username and Password for the database to secure it).
-	* `> exit`
+6.  Get [MongoDB](https://docs.mongodb.com/v3.0/tutorial/install-mongodb-on-ubuntu/) and run the following. 
+	* `$sudo mkdir -p /data/db/` (Create directory at $HOME on disk for MongoDB database)
 
 ##  Get Started
 
-* Start MongoDB deamon with authentication.
-	* `$sudo ./mongod --dbpath ../data/db --fork --logpath mongodb.log --auth`
+* Start MongoDB deamon with authentication and create admin user for all DBs.
+	* `$sudo mongod --fork --logpath mongodb.log --auth`
+	* `$mongo` 
+	* `> use admin`. 
+	* `> db.createUser({user:"username",pwd:"password",roles: [{role:"userAdminAnyDatabase",db: "admin"}]}) ` (Create Username and Password for the database).
+	* `> exit`
+	* `$mongo -u username -p password --authenticationDatabase admin`
+	* `> use MyStore` (Create Your own Database which will be used in Config file)
+	* `> db.createUser({user:"username",pwd:"password",roles: [{role:"userAdmin",db: "MyStore"}]}) ` (Create Username and Password for the database).
+	* `> exit`
 * Update config/Config.conf as suggested in the file.
 * `$python setup.py`
 * Start service/collector.sh to collect data from the Kafka stream. 

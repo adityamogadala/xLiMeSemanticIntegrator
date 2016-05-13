@@ -14,11 +14,13 @@ from threading import Thread
 import cPickle as pickle
 import shutil
 import re
+import os
 class SpeechtoTextVectors:
-        def __init__(self,configdic):
+        def __init__(self,configdic,path):
 		self.configdict = configdic
+		self.path = path
 	def createpklfiles(self,lang0,lang,corpus_ids,rows,word_features,X):
-		s = shelve.open('./StoreWordVec/wiki/'+lang0+'_'+lang+'_vec_wiki_shelf.db')
+		s = shelve.open(self.path+'StoreWordVec/wiki/'+lang0+'_'+lang+'_vec_wiki_shelf.db')
 		with open("docbivec_"+lang0+".txt","w") as f:
 			for ids,row in zip(corpus_ids,range(rows)):
 				doc_vector=np.array([0.0]*100)
@@ -39,7 +41,7 @@ class SpeechtoTextVectors:
 				f.write(" ".join(map(str, final_vector))+"\n")
 		s.close()
 		matrix = np.loadtxt("docbivec_"+lang0+".txt")
-		with open('./stotdocvecpkl/docbivec_'+lang0+'_'+lang+'.pkl', 'wb') as outfile:
+		with open(self.path+'docsim/stotdocvecpkl/docbivec_'+lang0+'_'+lang+'.pkl', 'wb') as outfile:
 			pickle.dump(matrix, outfile, pickle.HIGHEST_PROTOCOL)
 	def encorpus(self,corpus_en,corpus_en_id):
 		vectorizer = TfidfVectorizer(min_df=1,encoding="utf-8",decode_error="replace")
@@ -53,7 +55,7 @@ class SpeechtoTextVectors:
 		with open("ids_en.txt","w") as f:
 			for row in ids:
 				f.write(row+"\n")
-		shutil.copy2("ids_en.txt","./stotdocvecpkl/ids_en.copy")
+		shutil.copy2("ids_en.txt",self.path+"docsim/stotdocvecpkl/ids_en.copy")
 	def decorpus(self,corpus_de,corpus_de_id):
 		vectorizer = TfidfVectorizer(min_df=1,encoding="utf-8",decode_error="replace")
 		X_de= vectorizer.fit_transform(corpus_de).toarray()
@@ -64,7 +66,7 @@ class SpeechtoTextVectors:
 		with open("ids_de.txt","w") as f:
 			for row in ids:
 				f.write(row+"\n")
-		shutil.copy2("ids_de.txt","./stotdocvecpkl/ids_de.copy")
+		shutil.copy2("ids_de.txt",self.path+"docsim/stotdocvecpkl/ids_de.copy")
 	def itcorpus(self,corpus_it,corpus_it_id):
 		vectorizer = TfidfVectorizer(min_df=1,encoding="utf-8",decode_error="replace")
 		X_it= vectorizer.fit_transform(corpus_it).toarray()
@@ -75,7 +77,7 @@ class SpeechtoTextVectors:
 		with open("ids_it.txt","w") as f:
 			for row in ids:
 				f.write(row+"\n")
-		shutil.copy2("ids_it.txt","./stotdocvecpkl/ids_it.copy")
+		shutil.copy2("ids_it.txt",self.path+"docsim/stotdocvecpkl/ids_it.copy")
 	def escorpus(self,corpus_es,corpus_es_id):
 		vectorizer = TfidfVectorizer(min_df=1,encoding="utf-8",decode_error="replace")
 		X_es= vectorizer.fit_transform(corpus_es).toarray()
@@ -86,7 +88,7 @@ class SpeechtoTextVectors:
 		with open("ids_es.txt","w") as f:
 			for row in ids:
 				f.write(row+"\n")
-		shutil.copy2("ids_es.txt","./stotdocvecpkl/ids_es.copy")
+		shutil.copy2("ids_es.txt",self.path+"docsim/stotdocvecpkl/ids_es.copy")
         def computevectors(self):
                 if self.configdict['MongoDBPath']!="":
 			client = MongoClient(self.configdict['MongoDBPath'])
@@ -116,25 +118,25 @@ class SpeechtoTextVectors:
 				################## START - Spawn Threads to create doc vectors pickle files (Parallel)################
 				if len(corpus_en)>0 and len(corpus_en_id)>0:
 					try:
-						t1 = Thread(target=self.encorpus, args=(corpus_en,corpus_en_id))
+						t1 = Thread(target=self.encorpus, args=(corpus_en,corpus_en_id,path))
 		                		t1.start()
 					except:
 						pass
 				if len(corpus_de)>0 and len(corpus_de_id)>0:
 					try:
-						t2 = Thread(target=self.decorpus, args=(corpus_de,corpus_de_id))
+						t2 = Thread(target=self.decorpus, args=(corpus_de,corpus_de_id,path))
         		       			t2.start()
 					except:
 						pass
 				if len(corpus_it)>0 and len(corpus_it_id)>0:
 					try:
-						t3 = Thread(target=self.itcorpus, args=(corpus_it,corpus_it_id))
+						t3 = Thread(target=self.itcorpus, args=(corpus_it,corpus_it_id,path))
         		       			t3.start()
 					except:
 						pass
 				if len(corpus_es)>0 and len(corpus_es_id)>0:
 					try:
-						t4 = Thread(target=self.escorpus, args=(corpus_es,corpus_es_id))
+						t4 = Thread(target=self.escorpus, args=(corpus_es,corpus_es_id,path))
         		        		t4.start()
 					except:
 						pass

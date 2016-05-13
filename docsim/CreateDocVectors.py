@@ -23,17 +23,18 @@ def readconfig():
 def main():
 	configdic = readconfig()
 	template="docvecpkl"
+	path = '/'+'/'.join(os.getcwd().split('/')[1:-1])+'/'
 	#### SpeechtoText Doc Vectors ####
-	directory="./stot"+template
+	directory=path+"docsim/stot"+template
 	if not os.path.exists(directory):
 	    os.makedirs(directory)
-	speechtotext = TVStoTDocVectors.SpeechtoTextVectors(configdic)
+	speechtotext = TVStoTDocVectors.SpeechtoTextVectors(configdic,path)
 	speechtotext.computevectors()
 	#### Subtitle Doc Vectors #####
-	directory="./subtitle"+template
+	directory=path+"docsim/subtitle"+template
 	if not os.path.exists(directory):
 	    os.makedirs(directory)
-	subtitles = TVSubDocVectors.SubtitlesVectors(configdic)
+	subtitles = TVSubDocVectors.SubtitlesVectors(configdic,path)
 	subtitles.computevectors()
 	##### Add more for Social Media, News etc #######
 if  __name__ =='__main__':

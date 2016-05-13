@@ -2,6 +2,7 @@
 Installation Instructions
 -------------------------
 
+1. Download Word Embeddings [Monolingual and Bilingual](http://people.aifb.kit.edu/amo/wordembeddings/)
 
 -------------------------
 Dependencies

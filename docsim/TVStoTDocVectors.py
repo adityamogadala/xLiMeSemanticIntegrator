@@ -118,25 +118,25 @@ class SpeechtoTextVectors:
 				################## START - Spawn Threads to create doc vectors pickle files (Parallel)################
 				if len(corpus_en)>0 and len(corpus_en_id)>0:
 					try:
-						t1 = Thread(target=self.encorpus, args=(corpus_en,corpus_en_id,path))
+						t1 = Thread(target=self.encorpus, args=(corpus_en,corpus_en_id))
 		                		t1.start()
 					except:
 						pass
 				if len(corpus_de)>0 and len(corpus_de_id)>0:
 					try:
-						t2 = Thread(target=self.decorpus, args=(corpus_de,corpus_de_id,path))
+						t2 = Thread(target=self.decorpus, args=(corpus_de,corpus_de_id))
         		       			t2.start()
 					except:
 						pass
 				if len(corpus_it)>0 and len(corpus_it_id)>0:
 					try:
-						t3 = Thread(target=self.itcorpus, args=(corpus_it,corpus_it_id,path))
+						t3 = Thread(target=self.itcorpus, args=(corpus_it,corpus_it_id))
         		       			t3.start()
 					except:
 						pass
 				if len(corpus_es)>0 and len(corpus_es_id)>0:
 					try:
-						t4 = Thread(target=self.escorpus, args=(corpus_es,corpus_es_id,path))
+						t4 = Thread(target=self.escorpus, args=(corpus_es,corpus_es_id))
         		        		t4.start()
 					except:
 						pass

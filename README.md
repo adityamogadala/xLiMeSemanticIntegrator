@@ -28,7 +28,7 @@ Code is Written in Python 2.7+ and Java. Also, it depends on.
 3. `$sudo pip install kafka-python`
 5.  Download Word Embeddings ([Monolingual and Bilingual](http://people.aifb.kit.edu/amo/wordembeddings/)) zip files. Extract and keep them in StoreWordVec/wiki for Wikipedia, StoreWordVec/news for News etc..
 6.  Get [MongoDB](https://docs.mongodb.com/v3.0/tutorial/install-mongodb-on-ubuntu/) and run the following. 
-	* `$sudo mkdir -p /data/db/` (Create at $HOME directory for MongoDB database)
+	* `$sudo mkdir -p data/db/` (Create at $HOME directory for MongoDB database)
 
 ##  Get Started
 

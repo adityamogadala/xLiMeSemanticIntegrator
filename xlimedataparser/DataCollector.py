@@ -22,8 +22,8 @@ class AutomatePushToMongo:
 		self.path = path
 		self.configdict = confdic
 	def continous_java_run(self,topic):
-		#tot = "java -cp ../utils/kafkaextractor_smallest.jar:. aifb.kit.xlime.kafkaextracor.RunExtractor "+topic+" "+self.configdict['KafkaConsumerGroupID']+" "+self.configdict['KafkaZookeeperPath']   # For using smallest offset of Kafka
-		tot = "java -cp ../utils/kafkaextractor_largest.jar:. aifb.kit.xlime.kafkaextracor.RunExtractor "+topic+" "+self.configdict['KafkaConsumerGroupID']+" "+self.configdict['KafkaZookeeperPath']   # For using largest offset of Kafka
+		tot = "java -cp ../utils/kafkaextractor_smallest.jar:. aifb.kit.xlime.kafkaextracor.RunExtractor "+topic+" "+self.configdict['KafkaConsumerGroupID']+" "+self.configdict['KafkaZookeeperPath']   # For using smallest offset of Kafka
+	#	tot = "java -cp ../utils/kafkaextractor_largest.jar:. aifb.kit.xlime.kafkaextracor.RunExtractor "+topic+" "+self.configdict['KafkaConsumerGroupID']+" "+self.configdict['KafkaZookeeperPath']   # For using largest offset of Kafka
 		vals = commands.getoutput(tot)
 		time.sleep(2)
 	def continous_mongo_socialmedia(self):
@@ -65,15 +65,15 @@ def main():
 				configdict[key[0]]=key[1]
 	generatedata = AutomatePushToMongo(path,configdict)
 	try:
-   		t1 = Thread(target=generatedata.continous_java_run, args=(confdict['KafkaTopicSocialMedia'],))
+   		t1 = Thread(target=generatedata.continous_java_run, args=(configdict['KafkaTopicSocialMedia'],))
 		t1.start()
-   		t2 = Thread(target=generatedata.continous_java_run, args=(confdict['KafkaTopicTVMetadata'],))
+   		t2 = Thread(target=generatedata.continous_java_run, args=(configdict['KafkaTopicTVMetadata'],))
 		t2.start()
-   		t0 = Thread(target=generatedata.continous_java_run, args=(confdict['KafkaTopicNews'],))
+   		t0 = Thread(target=generatedata.continous_java_run, args=(configdict['KafkaTopicNews'],))
 		t0.start()
-   		t6 = Thread(target=generatedata.continous_java_run, args=(confdict['KafkaTopicSubtitles'],))
+   		t6 = Thread(target=generatedata.continous_java_run, args=(configdict['KafkaTopicSubtitles'],))
 		t6.start()
-   		t8 = Thread(target=generatedata.continous_java_run, args=(confdict['KafkaTopicASR'],))
+   		t8 = Thread(target=generatedata.continous_java_run, args=(configdict['KafkaTopicASR'],))
 		t8.start()
 		t3 = Thread(target=generatedata.continous_mongo_socialmedia)
 		t3.start()

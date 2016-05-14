@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-import pymongo
 from pymongo import MongoClient
+import re
 class CountMongo:
 	def __init__(self,configdic):
 		self.configdict = configdic

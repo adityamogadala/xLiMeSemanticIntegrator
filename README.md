@@ -51,8 +51,7 @@ Code is Written in Python 2.7+ and Java. Also, it depends on.
 	* `> use MyStore`
 	* `> db.auth("username","password")` ("MyStore" user authentication)
 	* `> show collections`
-	* `> db.YOUR_COLLECTION_NAME.ensureIndex( {Text: "text", Title: "text"}, {dropDups: true} )`
-	* `> db.SUBTITLES_COLLECTION.ensureIndex( {Text: "text"}, {dropDups: true} )` (No Titles info for Subtitles.)
+	* `> db.getCollection('YOUR_COLLECTION_NAME').ensureIndex( {Text: "text", Title: "text"}, {dropDups: true} )`
 	* `> exit`
 * Start service/vecgenerator.sh to generate vectors for subtitles and speech to text data (yet to add for news and social media).
 	* `$ nohup sh vecgenerator.sh &`

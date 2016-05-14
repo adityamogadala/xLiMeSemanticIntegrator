@@ -88,8 +88,7 @@ class PushToMongoSubtitles:
 				for file_in_dir in files_in_dir:
 						if self.topic == self.configdict["KafkaTopicSubtitles"]:
 							jsonStrings = self.GenerateZattooSub(file_in_dir)
-							mongocoll = str(self.configdict["KafkaTopicSubtitles"])
-							bulk = db.mongocoll
+							bulk = db[self.configdict["KafkaTopicSubtitles"]]
 							if jsonStrings!=None:
 								for values in jsonStrings:
 									if 'SourceURL' in values and 'Text' in values:

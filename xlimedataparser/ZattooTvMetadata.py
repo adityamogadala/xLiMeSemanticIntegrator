@@ -59,12 +59,11 @@ class ZattooToMongo:
 				for file_in_dir in files_in_dir:
 						if self.topic == self.configdict['KafkaTopicTVMetadata']:
 							jsonStrings = self.GenerateTVMetaData(file_in_dir)
-							mongocoll = str(self.configdict['KafkaTopicTVMetadata'])
-							tvmetadata = db.mongocoll
+							bulk = db[self.configdict['KafkaTopicTVMetadata']]
 							if len(jsonStrings)!=0:
 								for values in jsonStrings:
 									try:
-										tvmetadata.insert(values,continue_on_error=True)
+										bulk.insert(values,continue_on_error=True)
 									except pymongo.errors.DuplicateKeyError:
 										pass
 			else:

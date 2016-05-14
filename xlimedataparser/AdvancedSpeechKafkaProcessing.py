@@ -113,8 +113,7 @@ class PushToMongoSpeech:
 				for file_in_dir in files_in_dir:
 						if self.topic == self.configdict['KafkaTopicASR']:
 							jsonStrings = self.GenerateZattooAsr(file_in_dir)
-							mongocoll = str(self.configdict['KafkaTopicASR'])
-							bulk = db.mongocoll
+							bulk = db[self.configdict['KafkaTopicASR']]
 							if jsonStrings!=None:
 								for values in jsonStrings:
 									if 'SourceURL' in values and 'Text' in values:

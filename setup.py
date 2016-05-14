@@ -6,6 +6,7 @@
 #==============================================================================
 import re
 import os
+from os.path import expanduser
 def readConfig():
 	configdict={}
 	config = './config/Config.conf'
@@ -17,10 +18,14 @@ def readConfig():
 	return configdict
 def createFolders():
 	params = readConfig()
+	home=expanduser("~")
+	path1 = home+'/storedata/'
+	if not os.path.exists(path1):
+		os.makedirs(path1)
 	for key,value in params.iteritems():
 		if re.search(r'^KafkaTopic',key):
-			if not os.path.exists('./storedata/'+value):
-				os.makedirs('./storedata/'+value)
+			if not os.path.exists(path1+value):
+				os.makedirs(path1+value)
 def main():
 	createFolders()
 if __name__ == '__main__':

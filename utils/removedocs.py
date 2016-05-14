@@ -2,6 +2,7 @@ import pymongo
 from pymongo import MongoClient
 import datetime
 from datetime import date
+import re
 class TestMongoSize:
 	def __init__(self, configdic):
 		self.configdict = configdic

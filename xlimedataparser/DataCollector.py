@@ -9,6 +9,7 @@
 import commands
 import time
 import sys
+import re
 import VicoSocialMediaStream
 import ZattooTvMetadata
 import JsiNewsStream

@@ -10,8 +10,9 @@ import json
 import os
 import re
 import sys
-import glob
+sys.path.insert(0,'../utils')
 import rake
+import glob
 from pymongo import MongoClient
 import pymongo
 import arrow
